@@ -2,7 +2,6 @@ apply plugin: 'java'
 apply plugin: 'signing'
 apply plugin: 'maven'
 
-// Our group/artifact ids. Version is declared in the main file
 group = 'pw.ian'
 archivesBaseName = 'albkit'
 version = '0.1.0-SNAPSHOT'
