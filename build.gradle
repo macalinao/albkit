@@ -1,11 +1,108 @@
-project.version = '0.1.0-SNAPSHOT'
-apply from: 'bootstrap/bootstrap.gradle'
+apply plugin: 'java'
+apply plugin: 'signing'
+apply plugin: 'maven'
 
-defaultTasks 'clean', 'copyPlugin', 'install'
+// Our group/artifact ids. Version is declared in the main file
+group = 'pw.ian'
+archivesBaseName = 'albkit'
+version = '0.1.0-SNAPSHOT'
+
+defaultTasks 'clean', 'build', 'install'
+
+buildscript {
+  repositories {
+    mavenCentral()
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'org.yaml:snakeyaml:1.5'
+    classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7.1'
+  }
+}
 
 repositories {
+  mavenCentral()
+  maven {
+    url 'http://repo.md-5.net/content/groups/public/'
+  }
 }
 
 dependencies {
+  compile 'org.bukkit:bukkit:1.7.9-R0.3-SNAPSHOT'
+  compile fileTree(dir: 'libs', includes: ['*.jar']) 
 }
 
+processResources {
+  from('src/main/resources') {
+    include '*'
+    filter { String line ->
+      line.replace('$version', 'v' + cmd('git describe --always --dirty=-dirty'))
+    }
+  }
+}
+
+/**
+ * Executes a command and returns its output.
+ */
+def cmd(str) {
+  try {
+    def output = new ByteArrayOutputStream()
+    exec {
+      commandLine str.split(' ')
+      standardOutput = output
+    }
+    return output.toString().trim()
+  }
+  catch (ignored) {
+    return null;
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.0'
+}
+
+// Publishing stuff
+task javadocJar(type: Jar) {
+  classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+  classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+  archives javadocJar, sourcesJar
+}
+
+signing {
+  sign configurations.archives
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment {
+        MavenDeployment deployment -> signing.signPom(deployment)
+      }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      pom.project {
+        name 'AlbKit'
+        packaging 'jar'
+        description 'Utility library'
+        url 'ian.pw'
+      }
+    }
+  }
+}
