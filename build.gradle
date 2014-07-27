@@ -11,12 +11,10 @@ defaultTasks 'clean', 'build', 'install'
 
 buildscript {
   repositories {
-    mavenCentral()
     jcenter()
   }
 
   dependencies {
-    classpath 'org.yaml:snakeyaml:1.5'
     classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7.1'
   }
 }
@@ -30,16 +28,6 @@ repositories {
 
 dependencies {
   compile 'org.bukkit:bukkit:1.7.9-R0.3-SNAPSHOT'
-  compile fileTree(dir: 'libs', includes: ['*.jar']) 
-}
-
-processResources {
-  from('src/main/resources') {
-    include '*'
-    filter { String line ->
-      line.replace('$version', 'v' + cmd('git describe --always --dirty=-dirty'))
-    }
-  }
 }
 
 /**
