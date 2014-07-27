@@ -88,7 +88,7 @@ uploadArchives {
         name 'AlbKit'
         packaging 'jar'
         description 'Utility library'
-        url 'ian.pw'
+        url 'http://ian.pw'
       }
     }
   }
