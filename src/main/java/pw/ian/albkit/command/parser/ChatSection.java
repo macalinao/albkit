@@ -1,6 +1,6 @@
-package pw.ian.albkit.parser;
+package pw.ian.albkit.command.parser;
 
-public final class ChatSection {
+public class ChatSection {
     private final String arg;
 
     public ChatSection(final String arg) {

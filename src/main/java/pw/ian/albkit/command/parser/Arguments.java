@@ -1,9 +1,9 @@
-package pw.ian.albkit.parser;
+package pw.ian.albkit.command.parser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Arguments {
+public class Arguments {
     private final List<ChatSection> all;
     private final List<ChatSection> arguments;
     private final List<Flag> flags;

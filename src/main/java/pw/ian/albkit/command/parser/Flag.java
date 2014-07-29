@@ -1,6 +1,6 @@
-package pw.ian.albkit.parser;
+package pw.ian.albkit.command.parser;
 
-public final class Flag {
+public class Flag {
     private final String flag;
     private final String value;
     private final ChatSection valArg;
