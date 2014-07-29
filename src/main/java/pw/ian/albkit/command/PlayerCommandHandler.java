@@ -42,8 +42,10 @@ public abstract class PlayerCommandHandler extends CommandHandler {
         onCommand((Player) sender, args);
     }
 
-    public abstract void onCommand(Player player, Arguments args);
+    public void onCommand(Player player, Arguments args) {
+    }
 
-    public abstract void onCommand(Player player, String[] args);
+    public void onCommand(Player player, String[] args) {
+    }
 
 }
