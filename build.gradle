@@ -73,8 +73,12 @@ artifacts {
   archives javadocJar, sourcesJar
 }
 
-signing {
-  sign configurations.archives
+
+if (project.hasProperty('signing.keyId')) { // Sign if we have signing stuff
+  apply plugin: 'signing'
+  signing {
+    sign configurations.archives
+  }
 }
 
 uploadArchives {
