@@ -8,6 +8,14 @@ version = '0.1.0-SNAPSHOT'
 
 defaultTasks 'clean', 'build', 'install'
 
+// Default parameters
+if (!project.hasProperty('ossrhUsername')) {
+  ext.ossrhUsername = '';
+}
+if (!project.hasProperty('ossrhPassword')) {
+  ext.ossrhPassword = '';
+}
+
 buildscript {
   repositories {
     jcenter()
