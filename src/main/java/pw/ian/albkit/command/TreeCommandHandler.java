@@ -5,6 +5,7 @@
  */
 package pw.ian.albkit.command;
 
+import pw.ian.albkit.command.parser.Arguments;
 import pw.ian.albkit.util.Messaging;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -107,15 +108,15 @@ public abstract class TreeCommandHandler extends CommandHandler {
     }
 
     @Override
-    public void onCommand(CommandSender sender, String[] args) {
-        if (args.length == 0) {
+    public void onCommand(CommandSender sender, Arguments args) {
+        if (args.length() == 0) {
             onCommandNoArgs(sender);
             return;
         }
 
-        CommandHandler handler = subcommands.get(args[0]);
+        CommandHandler handler = subcommands.get(args.getArgument(0));
         if (handler != null) {
-            handler.onCommand(sender, Arrays.copyOfRange(args, 1, args.length));
+            handler.onCommand(sender, new Arguments(Arrays.copyOfRange(args.toStringArray(), 1, args.length())));
             return;
         }
 

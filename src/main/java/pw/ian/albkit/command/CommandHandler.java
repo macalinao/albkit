@@ -5,6 +5,8 @@
  */
 package pw.ian.albkit.command;
 
+import pw.ian.albkit.command.parser.Arguments;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -104,7 +106,7 @@ public abstract class CommandHandler implements CommandExecutor {
         if (async) {
             executeAsync(sender, args);
         } else {
-            this.onCommand(sender, args);
+            this.onCommand(sender, new Arguments(args));
         }
         return true;
     }
@@ -120,7 +122,7 @@ public abstract class CommandHandler implements CommandExecutor {
 
             @Override
             public void run() {
-                CommandHandler.this.onCommand(sender, args);
+                CommandHandler.this.onCommand(sender, new Arguments(args));
             }
         }).runTaskAsynchronously(plugin);
     }
@@ -132,6 +134,6 @@ public abstract class CommandHandler implements CommandExecutor {
      * @param sender
      * @param args
      */
-    public void onCommand(final CommandSender sender, final String[] args) {
+    public void onCommand(final CommandSender sender, final Arguments args) {
     }
 }

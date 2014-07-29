@@ -5,6 +5,8 @@
  */
 package pw.ian.albkit.command;
 
+import pw.ian.albkit.command.parser.Arguments;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +23,7 @@ public abstract class PlayerCommandHandler extends CommandHandler {
     }
 
     @Override
-    public void onCommand(CommandSender sender, String[] args) {
+    public void onCommand(CommandSender sender, Arguments args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "You must be a player to use this command.");
             return;
@@ -30,6 +32,6 @@ public abstract class PlayerCommandHandler extends CommandHandler {
         onCommand((Player) sender, args);
     }
 
-    public abstract void onCommand(Player player, String[] args);
+    public abstract void onCommand(Player player, Arguments args);
 
 }

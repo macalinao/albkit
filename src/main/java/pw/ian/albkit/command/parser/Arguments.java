@@ -62,6 +62,14 @@ public class Arguments {
         return all.size();
     }
 
+    public String[] toStringArray() {
+        final String[] res = new String[all.size()];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = all.get(i).rawString();
+        }
+        return res;
+    }
+
     private void parseArguments(final String[] args) {
         for (int i = 0; i < args.length; i++) {
             final String arg = args[i];
@@ -78,20 +86,15 @@ public class Arguments {
                             throw new IllegalArgumentException(
                                     "Invalid argument supplied: " + arg);
                         }
-                        if (args.length - 1 == i) {
-                            throw new IllegalArgumentException(
-                                    "Expected value for flag: " + arg);
-                        }
-                        // flag with double --
+                        // flag with double -- (no value)
                         doubleFlags.add(new Flag(arg.substring(2, arg.length()),
-                                args[i + 1]));
-                        i++;
+                                null));
                     } else {
                         if (args.length - 1 == i) {
                             throw new IllegalArgumentException(
                                     "Expected value for flag: " + arg);
                         }
-                        // flag with single -
+                        // flag with single - (plus value)
                         flags.add(new Flag(arg.substring(1, arg.length()),
                                 args[i + 1]));
                         i++;
