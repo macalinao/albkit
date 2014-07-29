@@ -8,6 +8,7 @@ package pw.ian.albkit.command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *
@@ -15,8 +16,8 @@ import org.bukkit.entity.Player;
  */
 public abstract class PlayerCommandHandler extends CommandHandler {
 
-    public PlayerCommandHandler(String name) {
-        super(name);
+    public PlayerCommandHandler(JavaPlugin plugin, String name) {
+        super(plugin, name);
     }
 
     @Override

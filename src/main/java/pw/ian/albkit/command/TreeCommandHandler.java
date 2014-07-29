@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
 import pw.ian.albkit.util.ColorScheme;
 
 /**
@@ -27,8 +28,8 @@ public abstract class TreeCommandHandler extends CommandHandler {
 
     private ColorScheme colorScheme = ColorScheme.DEFAULT;
 
-    public TreeCommandHandler(String name) {
-        super(name);
+    public TreeCommandHandler(JavaPlugin plugin, String name) {
+        super(plugin, name);
     }
 
     public void setColorScheme(ColorScheme colorScheme) {

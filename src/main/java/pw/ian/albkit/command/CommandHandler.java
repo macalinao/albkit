@@ -9,12 +9,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
  * @author ian
  */
 public abstract class CommandHandler implements CommandExecutor {
+
+    private final JavaPlugin plugin;
 
     private final String name;
 
@@ -24,11 +28,15 @@ public abstract class CommandHandler implements CommandExecutor {
 
     private String permission;
 
-    public CommandHandler(String name) {
+    private boolean async;
+
+    public CommandHandler(JavaPlugin plugin, String name) {
+        this.plugin = plugin;
         this.name = name;
         usage = "/" + name;
         description = usage;
         permission = null;
+        async = false;
     }
 
     /**
@@ -74,6 +82,14 @@ public abstract class CommandHandler implements CommandExecutor {
         this.permission = permission;
     }
 
+    public boolean isAsync() {
+        return async;
+    }
+
+    public void setAsync(boolean async) {
+        this.async = async;
+    }
+
     /**
      * Sends the usage message to the given CommandSender.
      *
@@ -84,10 +100,38 @@ public abstract class CommandHandler implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] args) {
-        this.onCommand(cs, args);
+    public boolean onCommand(CommandSender sender, Command cmnd, String string, String[] args) {
+        if (async) {
+            executeAsync(sender, args);
+        } else {
+            this.onCommand(sender, args);
+        }
         return true;
     }
 
-    public abstract void onCommand(CommandSender sender, String[] args);
+    /**
+     * Executes this command asynchronously.
+     *
+     * @param sender
+     * @param args
+     */
+    private void executeAsync(final CommandSender sender, final String[] args) {
+        (new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                CommandHandler.this.onCommand(sender, args);
+            }
+        }).runTaskAsynchronously(plugin);
+    }
+
+    /**
+     * Command handler method. Override this if you want to use a synchronous
+     * command.
+     *
+     * @param sender
+     * @param args
+     */
+    public void onCommand(final CommandSender sender, final String[] args) {
+    }
 }
