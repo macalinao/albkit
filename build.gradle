@@ -35,6 +35,8 @@ repositories {
 
 dependencies {
   compile 'org.bukkit:bukkit:1.7.9-R0.3-SNAPSHOT'
+
+  testCompile 'junit:junit:4.11'
 }
 
 /**
