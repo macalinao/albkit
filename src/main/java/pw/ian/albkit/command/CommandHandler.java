@@ -107,6 +107,7 @@ public abstract class CommandHandler implements CommandExecutor {
             executeAsync(sender, args);
         } else {
             this.onCommand(sender, new Arguments(args));
+            this.onCommand(sender, args);
         }
         return true;
     }
@@ -119,10 +120,10 @@ public abstract class CommandHandler implements CommandExecutor {
      */
     private void executeAsync(final CommandSender sender, final String[] args) {
         (new BukkitRunnable() {
-
             @Override
             public void run() {
                 CommandHandler.this.onCommand(sender, new Arguments(args));
+                CommandHandler.this.onCommand(sender, args);
             }
         }).runTaskAsynchronously(plugin);
     }
@@ -135,5 +136,15 @@ public abstract class CommandHandler implements CommandExecutor {
      * @param args
      */
     public void onCommand(final CommandSender sender, final Arguments args) {
+    }
+
+    /**
+     * Command handler method. Override this if you want to use a synchronous
+     * command.
+     *
+     * @param sender
+     * @param args
+     */
+    public void onCommand(final CommandSender sender, final String[] args) {
     }
 }

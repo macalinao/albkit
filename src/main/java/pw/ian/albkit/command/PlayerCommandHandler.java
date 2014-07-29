@@ -32,6 +32,18 @@ public abstract class PlayerCommandHandler extends CommandHandler {
         onCommand((Player) sender, args);
     }
 
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "You must be a player to use this command.");
+            return;
+        }
+
+        onCommand((Player) sender, args);
+    }
+
     public abstract void onCommand(Player player, Arguments args);
+
+    public abstract void onCommand(Player player, String[] args);
 
 }
