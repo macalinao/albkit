@@ -3,6 +3,12 @@ package pw.ian.albkit.command.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A simple and easy to use method of parsing arguments into different primitive
+ * types and parsing flags
+ *
+ * @author Ollie
+ */
 public class Arguments {
     private final List<ChatSection> all;
     private final List<ChatSection> arguments;

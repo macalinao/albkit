@@ -1,6 +1,16 @@
 package pw.ian.albkit.command.parser;
 
+/**
+ * A wrapper around a String which allows for parsing of many primitive data
+ * types as well as providing methods to check whether the argument is a valid
+ * form of said primitive types
+ *
+ * @author Ollie
+ */
 public class ChatSection {
+    /**
+     * The raw argument
+     */
     private final String arg;
 
     public ChatSection(final String arg) {

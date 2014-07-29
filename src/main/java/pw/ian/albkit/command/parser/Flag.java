@@ -1,5 +1,10 @@
 package pw.ian.albkit.command.parser;
 
+/**
+ * A flag which simply has a name and a value
+ *
+ * @author Ollie
+ */
 public class Flag {
     private final String flag;
     private final String value;
