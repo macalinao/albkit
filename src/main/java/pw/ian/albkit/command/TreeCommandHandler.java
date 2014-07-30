@@ -29,6 +29,10 @@ public abstract class TreeCommandHandler extends CommandHandler {
 
     private ColorScheme colorScheme = ColorScheme.DEFAULT;
 
+    public TreeCommandHandler(String name) {
+        super(name);
+    }
+
     public TreeCommandHandler(JavaPlugin plugin, String name) {
         super(plugin, name);
     }
