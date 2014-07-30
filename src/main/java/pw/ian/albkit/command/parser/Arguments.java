@@ -10,11 +10,29 @@ import java.util.List;
  * @author Ollie
  */
 public class Arguments {
+    /**
+     * A List of all of the arguments in ChatSection form
+     */
     private final List<ChatSection> all;
+    /**
+     * A List of arguments, not including flag arguments, in ChatSection form
+     */
     private final List<ChatSection> arguments;
+    /**
+     * A List of all flags prefixed with -
+     */
     private final List<Flag> flags;
+    /**
+     * A List of all flags prefixed with --
+     */
     private final List<Flag> doubleFlags;
 
+    /**
+     * Creates a new Arguments object and immediately parses the given String[]
+     * of arguments into ChatSections and Flags.
+     *
+     * @param parse The String[] of raw arguments to parse
+     */
     public Arguments(final String[] parse) {
         this.all = new ArrayList<>();
         this.arguments = new ArrayList<>();
