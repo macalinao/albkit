@@ -18,18 +18,14 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public abstract class PlayerCommandHandler extends CommandHandler {
 
+    /**
+     * C'tor
+     * 
+     * @param plugin
+     * @param name 
+     */
     public PlayerCommandHandler(JavaPlugin plugin, String name) {
         super(plugin, name);
-    }
-
-    @Override
-    public void onCommand(CommandSender sender, Arguments args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "You must be a player to use this command.");
-            return;
-        }
-
-        onCommand((Player) sender, args);
     }
 
     @Override
@@ -42,10 +38,23 @@ public abstract class PlayerCommandHandler extends CommandHandler {
         onCommand((Player) sender, args);
     }
 
-    public void onCommand(Player player, Arguments args) {
+    /**
+     * Called when this command is executed.
+     *
+     * @param player
+     * @param args
+     */
+    public void onCommand(Player player, String[] args) {
+        this.onCommand(player, new Arguments(args));
     }
 
-    public void onCommand(Player player, String[] args) {
+    /**
+     * Called when this command is executed.
+     *
+     * @param player
+     * @param args
+     */
+    public void onCommand(Player player, Arguments args) {
     }
 
 }
