@@ -23,7 +23,6 @@ dependencies {
 
 group = 'pw.ian'
 archivesBaseName = 'albkit'
-version = '0.1.0-SNAPSHOT'
 
 defaultTasks 'clean', 'build', 'install'
 
