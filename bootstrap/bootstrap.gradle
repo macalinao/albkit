@@ -1,0 +1,65 @@
+/**
+ * bukkit-bootstrap (c) 2013-2014 Ian Macalinao
+ */
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7.1'
+  }
+}
+
+if (!project.hasProperty('testPluginDir')) {
+  ext.testPluginDir = '';
+}
+if (!project.hasProperty('remotePluginDir')) {
+  ext.remotePluginDir = '';
+}
+
+repositories {
+  mavenCentral()
+  maven {
+    url 'http://repo.md-5.net/content/groups/public/'
+  }
+}
+
+dependencies {
+  compile 'org.bukkit:bukkit:1.7.9-R0.3-SNAPSHOT'
+}
+
+processResources {
+  from('src/main/resources') {
+    include '*'
+    filter { String line ->
+      line.replace('$version', 'v' + cmd('git describe --always --dirty=-dirty'))
+    }
+  }
+}
+
+/**
+ * Executes a command and returns its output.
+ */
+def cmd(str) {
+  try {
+    def output = new ByteArrayOutputStream()
+    exec {
+      commandLine str.split(' ')
+      standardOutput = output
+    }
+    return output.toString().trim()
+  }
+  catch (ignored) {
+    return null;
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.0'
+}

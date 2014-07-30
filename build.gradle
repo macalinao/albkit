@@ -1,6 +1,25 @@
-apply plugin: 'java'
-apply plugin: 'signing'
-apply plugin: 'maven'
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.2'
+    classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7.1'
+  }
+}
+
+project.version = '0.1.0-SNAPSHOT'
+apply from: 'bootstrap/bootstrap.gradle'
+apply from: 'bootstrap/publishing.gradle'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testCompile 'junit:junit:4.11'
+}
 
 group = 'pw.ian'
 archivesBaseName = 'albkit'
@@ -8,102 +27,10 @@ version = '0.1.0-SNAPSHOT'
 
 defaultTasks 'clean', 'build', 'install'
 
-// Default parameters
-if (!project.hasProperty('ossrhUsername')) {
-  ext.ossrhUsername = '';
-}
-if (!project.hasProperty('ossrhPassword')) {
-  ext.ossrhPassword = '';
-}
-
-buildscript {
-  repositories {
-    jcenter()
-  }
-
-  dependencies {
-    classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7.1'
-  }
-}
-
-repositories {
-  mavenCentral()
-  maven {
-    url 'http://repo.md-5.net/content/groups/public/'
-  }
-}
-
-dependencies {
-  compile 'org.bukkit:bukkit:1.7.9-R0.3-SNAPSHOT'
-
-  testCompile 'junit:junit:4.11'
-}
-
-/**
- * Executes a command and returns its output.
- */
-def cmd(str) {
-  try {
-    def output = new ByteArrayOutputStream()
-    exec {
-      commandLine str.split(' ')
-      standardOutput = output
-    }
-    return output.toString().trim()
-  }
-  catch (ignored) {
-    return null;
-  }
-}
-
-task wrapper(type: Wrapper) {
-  gradleVersion = '2.0'
-}
-
-// Publishing stuff
-task javadocJar(type: Jar) {
-  classifier = 'javadoc'
-    from javadoc
-}
-
-task sourcesJar(type: Jar) {
-  classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-  archives javadocJar, sourcesJar
-}
-
-
-if (project.hasProperty('signing.keyId')) { // Sign if we have signing stuff
-  apply plugin: 'signing'
-  signing {
-    sign configurations.archives
-  }
-}
-
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      beforeDeployment {
-        MavenDeployment deployment -> signing.signPom(deployment)
-      }
-
-      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-        authentication(userName: ossrhUsername, password: ossrhPassword)
-      }
-
-      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-        authentication(userName: ossrhUsername, password: ossrhPassword)
-      }
-
-      pom.project {
-        name 'AlbKit'
-        packaging 'jar'
-        description 'Utility library'
-        url 'http://ian.pw'
-      }
-    }
+modifyPom {
+  project {
+    name 'AlbKit'
+    description 'Bukkit utility library.'
+    url 'http://ian.pw'
   }
 }
