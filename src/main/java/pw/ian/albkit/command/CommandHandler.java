@@ -115,6 +115,11 @@ public abstract class CommandHandler implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmnd, String string, String[] args) {
+        if (permission != null && !sender.hasPermission(permission)) {
+            sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
+            return true;
+        }
+
         if (async) {
             executeAsync(sender, args);
         } else {
