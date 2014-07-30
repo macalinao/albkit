@@ -32,6 +32,15 @@ public abstract class CommandHandler implements CommandExecutor {
 
     private boolean async;
 
+    /**
+     * C'tor
+     *
+     * @param name
+     */
+    public CommandHandler(String name) {
+        this(null, name);
+    }
+
     public CommandHandler(JavaPlugin plugin, String name) {
         this.plugin = plugin;
         this.name = name;
@@ -89,6 +98,9 @@ public abstract class CommandHandler implements CommandExecutor {
     }
 
     public void setAsync(boolean async) {
+        if (async && plugin == null) {
+            throw new IllegalArgumentException("Cannot make command async without a plugin specified in the constructor!");
+        }
         this.async = async;
     }
 
