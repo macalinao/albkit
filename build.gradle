@@ -12,8 +12,14 @@ buildscript {
 project.version = '0.1.0-SNAPSHOT'
 apply from: 'bootstrap/bootstrap.gradle'
 apply from: 'bootstrap/publishing.gradle'
-// apply from: 'bootstrap/albkit.gradle'
-// apply from: 'bootstrap/bukkit_plugin.gradle'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testCompile 'junit:junit:4.11'
+}
 
 group = 'pw.ian'
 archivesBaseName = 'albkit'
@@ -24,7 +30,11 @@ defaultTasks 'clean', 'build', 'install'
 modifyPom {
   project {
     name 'AlbKit'
+<<<<<<< HEAD
     description 'Bukkit utility library'
+=======
+    description 'Bukkit utility library.'
+>>>>>>> temp
     url 'http://ian.pw'
   }
 }
