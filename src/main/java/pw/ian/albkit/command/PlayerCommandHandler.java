@@ -20,9 +20,18 @@ public abstract class PlayerCommandHandler extends CommandHandler {
 
     /**
      * C'tor
-     * 
+     *
+     * @param name
+     */
+    public PlayerCommandHandler(String name) {
+        super(name);
+    }
+
+    /**
+     * C'tor
+     *
      * @param plugin
-     * @param name 
+     * @param name
      */
     public PlayerCommandHandler(JavaPlugin plugin, String name) {
         super(plugin, name);
