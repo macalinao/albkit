@@ -42,6 +42,14 @@ public class Arguments {
         parseArguments(parse);
     }
 
+    public ChatSection get(final int index) {
+        return getArgument(index, true);
+    }
+
+    public String getRaw(final int index) {
+        return getArgument(index, true).rawString();
+    }
+
     public ChatSection getArgument(final int index) {
         return getArgument(index, true);
     }
