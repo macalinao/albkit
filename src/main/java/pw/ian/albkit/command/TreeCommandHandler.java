@@ -72,7 +72,6 @@ public abstract class TreeCommandHandler extends CommandHandler {
     public void sendHelpMenu(CommandSender sender) {
         List<CommandHandler> cmds = new ArrayList<>(subcommands.values());
         Collections.sort(cmds, new Comparator<CommandHandler>() {
-
             @Override
             public int compare(CommandHandler t, CommandHandler t1) {
                 return t.getName().compareToIgnoreCase(t1.getName());

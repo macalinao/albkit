@@ -110,21 +110,21 @@ public class Arguments {
             switch (arg.charAt(0)) {
                 case '-':
                     if (arg.length() < 2) {
-                        throw new IllegalArgumentException(
-                                "Invalid argument supplied: " + arg);
+                        arguments.add(new ChatSection(arg));
+                        continue;
                     }
                     if (arg.charAt(1) == '-') {
                         if (arg.length() < 3) {
-                            throw new IllegalArgumentException(
-                                    "Invalid argument supplied: " + arg);
+                            arguments.add(new ChatSection(arg));
+                            continue;
                         }
                         // flag with double -- (no value)
-                        doubleFlags.add(new Flag(arg.substring(2, arg.length()),
-                                null));
+                        doubleFlags.add(new Flag(arg.substring(2,
+                                arg.length()), null));
                     } else {
                         if (args.length - 1 == i) {
-                            throw new IllegalArgumentException(
-                                    "Expected value for flag: " + arg);
+                            arguments.add(new ChatSection(arg));
+                            continue;
                         }
                         // flag with single - (plus value)
                         flags.add(new Flag(arg.substring(1, arg.length()),
