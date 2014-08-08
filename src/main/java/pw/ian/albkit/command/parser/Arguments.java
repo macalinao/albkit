@@ -1,5 +1,7 @@
 package pw.ian.albkit.command.parser;
 
+import pw.ian.albkit.command.parser.parameter.Params;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,8 @@ public class Arguments {
      * A List of all flags prefixed with --
      */
     private final List<Flag> doubleFlags;
+
+    private Params parameters;
 
     /**
      * Creates a new Arguments object and immediately parses the given String[]
@@ -138,5 +142,13 @@ public class Arguments {
                     break;
             }
         }
+    }
+
+    public Arguments withParams(Params parameters) {
+        if (this.parameters != null) {
+            throw new IllegalStateException();
+        }
+        this.parameters = parameters;
+        return this;
     }
 }

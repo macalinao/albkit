@@ -6,26 +6,22 @@
 package pw.ian.albkit.command;
 
 import pw.ian.albkit.command.parser.Arguments;
+import pw.ian.albkit.command.parser.parameter.ParamsBase;
+import pw.ian.albkit.util.ColorScheme;
 import pw.ian.albkit.util.Messaging;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import pw.ian.albkit.util.ColorScheme;
+
+import java.util.*;
 
 /**
- *
  * @author ian
  */
 public abstract class TreeCommandHandler extends CommandHandler {
 
-    private final Map<String, CommandHandler> subcommands = new HashMap<>();
+    private final Map<String, CommandData> subcommands = new HashMap<>();
 
     private ColorScheme colorScheme = ColorScheme.DEFAULT;
 
@@ -70,20 +66,22 @@ public abstract class TreeCommandHandler extends CommandHandler {
      * @param sender
      */
     public void sendHelpMenu(CommandSender sender) {
-        List<CommandHandler> cmds = new ArrayList<>(subcommands.values());
-        Collections.sort(cmds, new Comparator<CommandHandler>() {
+        List<CommandData> cmds = new ArrayList<>(subcommands.values());
+        Collections.sort(cmds, new Comparator<CommandData>() {
             @Override
-            public int compare(CommandHandler t, CommandHandler t1) {
+            public int compare(CommandData t, CommandData t1) {
                 return t.getName().compareToIgnoreCase(t1.getName());
             }
         });
 
         List<String> msgs = new ArrayList<>();
 
-        for (CommandHandler handler : cmds) {
+        for (CommandData data : cmds) {
+            CommandHandler handler = data.getHandler();
             if (handler.getPermission() == null
                     || sender.hasPermission(handler.getPermission())) {
-                msgs.add(ChatColor.GREEN + "/" + getName() + " " + handler.getName() + " - "
+                msgs.add(ChatColor.GREEN + "/" + getName() + " " + handler
+                        .getName() + " - "
                         + ChatColor.YELLOW + handler.getDescription());
             }
         }
@@ -107,7 +105,10 @@ public abstract class TreeCommandHandler extends CommandHandler {
      * @param handler
      */
     protected void addSubcommand(String name, CommandHandler handler) {
-        subcommands.put(name.toLowerCase(), handler);
+        CommandData data = new CommandData(name.toLowerCase(), handler,
+                ParamsBase.fromUsageString(
+                        handler.getUsage()));
+        subcommands.put(data.getName(), data);
     }
 
     @Override
@@ -117,9 +118,13 @@ public abstract class TreeCommandHandler extends CommandHandler {
             return;
         }
 
-        CommandHandler handler = subcommands.get(args.getRaw(0));
+        CommandData data = subcommands.get(args.getRaw(0));
+        CommandHandler handler = data.getHandler();
         if (handler != null) {
-            handler.onCommand(sender, new Arguments(Arrays.copyOfRange(args.toStringArray(), 1, args.length())));
+            Arguments newArgs = new Arguments(
+                    Arrays.copyOfRange(args.toStringArray(), 1, args.length()));
+            handler.onCommand(sender, newArgs.withParams(
+                    data.getParamsBase().createParams(newArgs)));
             return;
         }
 
@@ -133,7 +138,7 @@ public abstract class TreeCommandHandler extends CommandHandler {
             return;
         }
 
-        CommandHandler handler = subcommands.get(args[0]);
+        CommandHandler handler = subcommands.get(args[0]).getHandler();
         if (handler != null) {
             handler.onCommand(sender, Arrays.copyOfRange(args, 1, args.length));
             return;

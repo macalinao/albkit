@@ -6,6 +6,7 @@
 package pw.ian.albkit.command;
 
 import pw.ian.albkit.command.parser.Arguments;
+import pw.ian.albkit.command.parser.parameter.ParamsBase;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -31,6 +32,8 @@ public abstract class CommandHandler implements CommandExecutor {
     private String permission;
 
     private boolean async;
+
+    protected ParamsBase paramsBase;
 
     /**
      * C'tor
@@ -69,6 +72,7 @@ public abstract class CommandHandler implements CommandExecutor {
      */
     public void setUsage(String usage) {
         this.usage = usage;
+        paramsBase = ParamsBase.fromUsageString(usage);
     }
 
     /**
@@ -150,7 +154,11 @@ public abstract class CommandHandler implements CommandExecutor {
      * @param args
      */
     public void onCommand(final CommandSender sender, final String[] args) {
-        this.onCommand(sender, new Arguments(args));
+        Arguments newArgs = new Arguments(args);
+        if (paramsBase != null) {
+            newArgs.withParams(paramsBase.createParams(newArgs));
+        }
+        this.onCommand(sender, newArgs);
     }
 
     /**
