@@ -117,7 +117,7 @@ public abstract class TreeCommandHandler extends CommandHandler {
             return;
         }
 
-        CommandHandler handler = subcommands.get(args.getArgument(0));
+        CommandHandler handler = subcommands.get(args.getRaw(0));
         if (handler != null) {
             handler.onCommand(sender, new Arguments(Arrays.copyOfRange(args.toStringArray(), 1, args.length())));
             return;
