@@ -8,6 +8,9 @@ import pw.ian.albkit.command.parser.ChatSection;
  * @author Ollie
  */
 public class ParamChatSection extends ChatSection {
+    /**
+     * Whether the parameter is optional
+     */
     private final boolean optional;
 
     /**
@@ -22,6 +25,11 @@ public class ParamChatSection extends ChatSection {
         this.optional = optional;
     }
 
+    /**
+     * Returns whether the parameter is optional
+     *
+     * @return True if the parameter is optional, false if it is required
+     */
     public boolean isOptional() {
         return optional;
     }

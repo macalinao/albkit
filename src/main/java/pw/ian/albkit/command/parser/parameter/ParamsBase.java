@@ -14,7 +14,13 @@ import java.util.Map;
  * @author Ollie
  */
 public class ParamsBase {
+    /**
+     * A list of all of the parameters
+     */
     private final List<Parameter> params;
+    /**
+     * The number of arguments before the first parameter
+     */
     private final int argsBeforeParams;
 
     private ParamsBase(List<Parameter> params, int argsBeforeParams) {
@@ -22,6 +28,12 @@ public class ParamsBase {
         this.argsBeforeParams = argsBeforeParams;
     }
 
+    /**
+     * Creates a set of parameters for this base using the given arguments
+     *
+     * @param args The arguments to create the parameters from
+     * @return A set of parameters for the given arguments
+     */
     public Params createParams(Arguments args) {
         Map<String, ParamChatSection> paramsMap = new HashMap<>();
         for (int i = argsBeforeParams - 1; i < args.length(); i++) {
@@ -35,6 +47,12 @@ public class ParamsBase {
         return new Params(paramsMap);
     }
 
+    /**
+     * Builds a new ParamsBase by parsing the given usage string for a command
+     *
+     * @param usageString The command usage string to parse
+     * @return A new ParamsBase created from parsing the given usage string
+     */
     public static ParamsBase fromUsageString(String usageString) {
         List<Parameter> res = new ArrayList<>();
         boolean required = false;

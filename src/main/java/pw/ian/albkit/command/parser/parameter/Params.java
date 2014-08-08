@@ -8,6 +8,9 @@ import java.util.Map;
  * @author Ollie
  */
 public class Params {
+    /**
+     * A map of all of the parameters
+     */
     private final Map<String, ParamChatSection> params;
 
     public Params(Map<String, ParamChatSection> params) {
