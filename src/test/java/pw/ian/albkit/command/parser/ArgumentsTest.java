@@ -34,17 +34,18 @@ public class ArgumentsTest {
                 args.getValueFlag("f").getRawValue(), "banter");
         Assert.assertTrue(args.hasNonValueFlag("lol"));
 
-        ParamsBase base = ParamsBase.fromUsageString("/tree hello <hi> [lol]");
-        args = new Arguments("hello", "bob", "trees");
-        System.out.println(
-                "Parsing: { hello, bob, trees } for usage '/tree hello <hi> [lol]' which produces parameters { hi, lol }");
-        args.withParams(base.createParams(args));
-        Params params = args.getParams();
-        System.out.println("Got params: " + string(params));
-        Assert.assertEquals("Not equal!", string(params),
-                "{ [ hi, bob ] , [ lol, trees ] }");
-        Assert.assertEquals(params.get("hi").get(), "bob");
-        Assert.assertTrue(params.valid());
+        for (int i = 0; i < 100; i++) {
+            ParamsBase base = ParamsBase
+                    .fromUsageString("/tree hello <hi> [lol]");
+            args = new Arguments("hello", "bob", "trees");
+            System.out.println(
+                    "Parsing: { hello, bob, trees } for usage '/tree hello <hi> [lol]' which produces parameters { hi, lol }");
+            args.withParams(base.createParams(args));
+            Params params = args.getParams();
+            System.out.println("Got params: " + string(params));
+            Assert.assertEquals(params.get("hi").get(), "bob");
+            Assert.assertTrue(params.valid());
+        }
     }
 
     String string(Params params) {
