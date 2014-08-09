@@ -21,7 +21,7 @@ import java.util.*;
  */
 public abstract class TreeCommandHandler extends CommandHandler {
 
-    private final Map<String, CommandData> subcommands = new HashMap<>();
+    private final Map<String, CommandHandler> subcommands = new HashMap<>();
 
     private ColorScheme colorScheme = ColorScheme.DEFAULT;
 
@@ -66,18 +66,17 @@ public abstract class TreeCommandHandler extends CommandHandler {
      * @param sender
      */
     public void sendHelpMenu(CommandSender sender) {
-        List<CommandData> cmds = new ArrayList<>(subcommands.values());
-        Collections.sort(cmds, new Comparator<CommandData>() {
+        List<CommandHandler> cmds = new ArrayList<>(subcommands.values());
+        Collections.sort(cmds, new Comparator<CommandHandler>() {
             @Override
-            public int compare(CommandData t, CommandData t1) {
+            public int compare(CommandHandler t, CommandHandler t1) {
                 return t.getName().compareToIgnoreCase(t1.getName());
             }
         });
 
         List<String> msgs = new ArrayList<>();
 
-        for (CommandData data : cmds) {
-            CommandHandler handler = data.getHandler();
+        for (CommandHandler handler : cmds) {
             if (handler.getPermission() == null
                     || sender.hasPermission(handler.getPermission())) {
                 msgs.add(ChatColor.GREEN + "/" + getName() + " " + handler
@@ -105,10 +104,7 @@ public abstract class TreeCommandHandler extends CommandHandler {
      * @param handler
      */
     protected void addSubcommand(String name, CommandHandler handler) {
-        CommandData data = new CommandData(name.toLowerCase(), handler,
-                ParamsBase.fromUsageString(
-                        handler.getUsage()));
-        subcommands.put(data.getName(), data);
+        subcommands.put(handler.getName(), handler);
     }
 
     @Override
@@ -118,13 +114,12 @@ public abstract class TreeCommandHandler extends CommandHandler {
             return;
         }
 
-        CommandData data = subcommands.get(args.getRaw(0));
-        CommandHandler handler = data.getHandler();
+        CommandHandler handler = subcommands.get(args.getRaw(0));
         if (handler != null) {
             Arguments newArgs = new Arguments(
                     Arrays.copyOfRange(args.toStringArray(), 1, args.length()));
             handler.onCommand(sender, newArgs.withParams(
-                    data.getParamsBase().createParams(newArgs)));
+                    handler.getParamsBase().createParams(newArgs)));
             return;
         }
 
@@ -138,7 +133,7 @@ public abstract class TreeCommandHandler extends CommandHandler {
             return;
         }
 
-        CommandHandler handler = subcommands.get(args[0]).getHandler();
+        CommandHandler handler = subcommands.get(args[0]);
         if (handler != null) {
             handler.onCommand(sender, Arrays.copyOfRange(args, 1, args.length));
             return;

@@ -67,6 +67,10 @@ public abstract class CommandHandler implements CommandExecutor {
         return usage;
     }
 
+    public ParamsBase getParamsBase() {
+        return paramsBase;
+    }
+
     /**
      * @param usage the usage to set
      */
