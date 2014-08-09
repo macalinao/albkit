@@ -76,14 +76,6 @@ public class ParamsBase {
                 break;
             }
         }
-//        for (int i = 0; i < args.length(); i++) {
-//            if (params.size() < i) {
-//                break;
-//            }
-//            ParamInfo param = params.get(i - argsBeforeParams);
-//            paramsMap
-//                    .put(param.getName(), new Parameter(args.getRaw(i), param));
-//        }
         Params params = new Params(this, paramsMap);
         if (this.params.size() > args.length() - argsBeforeParams) {
             params.invalidate();
