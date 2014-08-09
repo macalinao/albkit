@@ -6,6 +6,7 @@ import pw.ian.albkit.command.parser.parameter.Parameter;
 import pw.ian.albkit.command.parser.parameter.Params;
 import pw.ian.albkit.command.parser.parameter.ParamsBase;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class ArgumentsTest {
@@ -34,18 +35,25 @@ public class ArgumentsTest {
                 args.getValueFlag("f").getRawValue(), "banter");
         Assert.assertTrue(args.hasNonValueFlag("lol"));
 
-        for (int i = 0; i < 100; i++) {
-            ParamsBase base = ParamsBase
-                    .fromUsageString("/tree hello <hi> [lol]");
-            args = new Arguments("hello", "bob", "trees");
-            System.out.println(
-                    "Parsing: { hello, bob, trees } for usage '/tree hello <hi> [lol]' which produces parameters { hi, lol }");
-            args.withParams(base.createParams(args));
-            Params params = args.getParams();
-            System.out.println("Got params: " + string(params));
-            Assert.assertEquals(params.get("hi").get(), "bob");
-            Assert.assertTrue(params.valid());
-        }
+        ParamsBase base = ParamsBase
+                .fromUsageString("/tree hello <hi> [lol]");
+        args = new Arguments("hello", "bob", "trees");
+        System.out.println(
+                "Parsing: { hello, bob, trees } for usage '/tree hello <hi> [lol]' which produces parameters { hi, lol }");
+        args.withParams(base.createParams(args));
+        Params params = args.getParams();
+        System.out.println("Got params: " + string(params));
+        Assert.assertEquals(params.get("hi").get(), "bob");
+        Assert.assertTrue(params.valid());
+
+        args = new Arguments("hello", "bob");
+        System.out.println();
+        System.out.println(
+                "Testing: " + Arrays.toString(args.toStringArray()));
+        args.withParams(base.createParams(args));
+        params = args.getParams();
+        System.out.println(string(params));
+        Assert.assertFalse(params.valid());
     }
 
     String string(Params params) {
