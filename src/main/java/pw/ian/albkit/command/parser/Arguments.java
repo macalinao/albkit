@@ -67,6 +67,10 @@ public class Arguments {
         }
     }
 
+    public Params getParams() {
+        return parameters;
+    }
+
     public Flag getValueFlag(final String flag) {
         for (final Flag f : flags) {
             if (f.getName().equalsIgnoreCase(flag)) {
