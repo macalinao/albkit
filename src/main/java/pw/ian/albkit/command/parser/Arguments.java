@@ -70,14 +70,16 @@ public class Arguments {
                             continue;
                         }
                         // flag with double -- (no value)
-                        doubleFlags.add(new Flag(arg.substring(2, arg.length()), null));
+                        doubleFlags.add(new Flag(arg.substring(2, arg.length()),
+                                null));
                     } else {
                         if (raw.length - 1 == i) {
                             arguments.add(new ChatSection(arg));
                             continue;
                         }
                         // flag with single - (plus value)
-                        flags.add(new Flag(arg.substring(1, arg.length()), raw[i + 1]));
+                        flags.add(new Flag(arg.substring(1, arg.length()),
+                                raw[i + 1]));
                         i++;
                     }
                     break;
@@ -181,6 +183,13 @@ public class Arguments {
         return hasParams() && getParams().has(parameter);
     }
 
+    /**
+     * Gets the Flag object with the given name, or null if it doesn't exist
+     *
+     * @param flag The name of the flag to get the Flag object for
+     * @return The Flag object for the flag with the given name - null if there
+     * isn't one
+     */
     public Flag getValueFlag(final String flag) {
         for (final Flag f : flags) {
             if (f.getName().equalsIgnoreCase(flag)) {
@@ -190,6 +199,13 @@ public class Arguments {
         return null;
     }
 
+    /**
+     * Checks whether these arguments contain a flag with a value with the given
+     * name
+     *
+     * @param flag The name of the flag to check for
+     * @return Whether these arguments contain a value flag with the given name
+     */
     public boolean hasValueFlag(final String flag) {
         for (final Flag f : flags) {
             if (f.getName().equalsIgnoreCase(flag)) {
@@ -199,6 +215,14 @@ public class Arguments {
         return false;
     }
 
+    /**
+     * Checks whether these arguments contain a flag with no value with the
+     * given name
+     *
+     * @param flag The name of the flag to check for
+     * @return Whether these arguments contain a non-value flag with the given
+     * name
+     */
     public boolean hasNonValueFlag(final String flag) {
         for (final Flag f : doubleFlags) {
             if (f.getName().equalsIgnoreCase(flag)) {
