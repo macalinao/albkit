@@ -30,6 +30,11 @@ public class Arguments {
      */
     private final List<Flag> doubleFlags;
 
+    /**
+     * The Params object for this Arguments object. This contains a Map of
+     * parameter names to ParamChatSection values for each registered parameter
+     * for the command
+     */
     private Params parameters;
 
     /**
@@ -47,18 +52,43 @@ public class Arguments {
         parseArguments(parse);
     }
 
+    /**
+     * Gets the ChatSection for the argument at the given index
+     *
+     * @param index The index to get the argument from
+     * @return A ChatSection object for the argument at the given index
+     */
     public ChatSection get(final int index) {
         return getArgument(index, true);
     }
 
+    /**
+     * Gets the raw string for the argument at the given index
+     *
+     * @param index The index to get the argument from
+     * @return A raw String for the argument at the given index
+     */
     public String getRaw(final int index) {
         return getArgument(index, true).rawString();
     }
 
+    /**
+     * Gets the ChatSection for the argument at the given index
+     *
+     * @param index The index to get the argument from
+     * @return A ChatSection object for the argument at the given index
+     */
     public ChatSection getArgument(final int index) {
         return getArgument(index, true);
     }
 
+    /**
+     * Gets the ChatSection for the argument at the given index
+     *
+     * @param index           The index to get the argument from
+     * @param includeFlagArgs Whether to include flag arguments
+     * @return A ChatSection object for the argument at the given index
+     */
     public ChatSection getArgument(final int index,
             final boolean includeFlagArgs) {
         if (includeFlagArgs) {
@@ -141,10 +171,20 @@ public class Arguments {
         return false;
     }
 
+    /**
+     * Gets the length of the arguments
+     *
+     * @return The amount of arguments in this Arguments object
+     */
     public int length() {
         return all.size();
     }
 
+    /**
+     * Converts this Arguments object to a raw String[] of arguments
+     *
+     * @return A raw String[] of arguments for this object
+     */
     public String[] toStringArray() {
         final String[] res = new String[all.size()];
         for (int i = 0; i < res.length; i++) {
@@ -191,7 +231,15 @@ public class Arguments {
         }
     }
 
-    public Arguments withParams(Params parameters) {
+    /**
+     * Sets the Params object for this Arguments object. Should only be called
+     * directly after creation. If this is called multiple times an
+     * IllegalStateException will be thrown
+     *
+     * @param parameters The Params to set for this Arguments object
+     * @return This Arguments object
+     */
+    public Arguments withParams(final Params parameters) {
         if (this.parameters != null) {
             throw new IllegalStateException();
         }
