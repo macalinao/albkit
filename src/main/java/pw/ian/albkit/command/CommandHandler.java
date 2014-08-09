@@ -6,7 +6,6 @@
 package pw.ian.albkit.command;
 
 import pw.ian.albkit.command.parser.Arguments;
-import pw.ian.albkit.command.parser.parameter.ParamsBase;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -33,10 +32,6 @@ public abstract class CommandHandler implements CommandExecutor {
 
     private boolean async;
 
-    private boolean validateUsage;
-
-    protected ParamsBase paramsBase;
-
     /**
      * C'tor
      *
@@ -53,7 +48,6 @@ public abstract class CommandHandler implements CommandExecutor {
         description = usage;
         permission = null;
         async = false;
-        validateUsage = true;
     }
 
     /**
@@ -70,24 +64,11 @@ public abstract class CommandHandler implements CommandExecutor {
         return usage;
     }
 
-    public boolean doesValidateUsage() {
-        return validateUsage;
-    }
-
-    public ParamsBase getParamsBase() {
-        return paramsBase;
-    }
-
     /**
      * @param usage the usage to set
      */
     public void setUsage(String usage) {
         this.usage = usage;
-        paramsBase = ParamsBase.fromUsageString(usage);
-    }
-
-    public void setValidateUsage(boolean validateUsage) {
-        this.validateUsage = validateUsage;
     }
 
     /**
@@ -169,15 +150,7 @@ public abstract class CommandHandler implements CommandExecutor {
      * @param args
      */
     public void onCommand(final CommandSender sender, final String[] args) {
-        Arguments newArgs = new Arguments(args);
-        if (paramsBase != null) {
-            newArgs.withParams(paramsBase.createParams(newArgs));
-            if (doesValidateUsage() && !newArgs.getParams().valid()) {
-                sender.sendMessage(ChatColor.RED + "Invalid usage, " + getUsage());
-                return;
-            }
-        }
-        this.onCommand(sender, newArgs);
+        this.onCommand(sender, new Arguments(args));
     }
 
     /**

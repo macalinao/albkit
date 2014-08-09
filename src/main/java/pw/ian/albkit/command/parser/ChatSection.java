@@ -33,15 +33,6 @@ public class ChatSection {
      *
      * @return This ChatSection's raw String value
      */
-    public String get() {
-        return rawString();
-    }
-
-    /**
-     * Gets the raw string this ChatSection wraps
-     *
-     * @return This ChatSection's raw String value
-     */
     public String rawString() {
         return arg;
     }
@@ -129,7 +120,7 @@ public class ChatSection {
      * Gets the material whose name is the same as the raw arg (ignores case)
      *
      * @return The material whose name is the same as the raw arg, or null if no
-     * material has that name
+     *         material has that name
      */
     public Material asMaterialFromName() {
         return Material.getMaterial(arg.toUpperCase());
@@ -238,7 +229,7 @@ public class ChatSection {
      * player
      *
      * @return Whether this ChatSection's argument can be parsed as an offline
-     * player
+     *         player
      */
     public boolean isOfflinePlayer() {
         return asOfflinePlayer() != null;
@@ -249,7 +240,7 @@ public class ChatSection {
      * from it's name
      *
      * @return Whether this ChatSection's argument can be parsed as a material
-     * from it's name
+     *         from it's name
      */
     public boolean isMaterialName() {
         return asMaterialFromName() != null;
@@ -260,7 +251,7 @@ public class ChatSection {
      * from it's ID
      *
      * @return Whether this ChatSection's argument can be parsed as a material
-     * from it's ID
+     *         from it's ID
      */
     public boolean isMaterialId() {
         try {
