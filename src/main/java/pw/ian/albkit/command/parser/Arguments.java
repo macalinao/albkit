@@ -68,14 +68,34 @@ public class Arguments {
         }
     }
 
+    /**
+     * Gets the Params for this set of Arguments
+     *
+     * @return This Arguments object's Params object
+     */
     public Params getParams() {
         return parameters;
     }
 
+    /**
+     * Checks whether Params are available for these Arguments
+     *
+     * @return True if this Arguments object has a Params object, otherwise false
+     */
     public boolean hasParams() {
         return getParams() != null;
     }
 
+    /**
+     * Gets a ParamChatSection value for the parameter with the given name, if
+     * there is a Params object available for these Arguments and said Params
+     * object contains a value for the given parameter. If either of these
+     * conditions are not true, null is returned
+     *
+     * @param parameter The parameter to get the ParamChatSection value for
+     * @return A ParamChatSection for the given parameter, or null if there isn't
+     * one
+     */
     public ParamChatSection getParam(String parameter) {
         if (!hasParams()) {
             return null;
@@ -83,11 +103,15 @@ public class Arguments {
         return getParams().get(parameter);
     }
 
+    /**
+     * Checks whether the given parameter is available in this Arguments' Params
+     * object
+     *
+     * @param parameter The parameter to check for the presence of
+     * @return Whether the given parameter is available
+     */
     public boolean hasParam(String parameter) {
-        if (!hasParams()) {
-            return false;
-        }
-        return getParams().has(parameter);
+        return hasParams() && getParams().has(parameter);
     }
 
     public Flag getValueFlag(final String flag) {

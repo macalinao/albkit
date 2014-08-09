@@ -23,6 +23,13 @@ public class ParamsBase {
      */
     private final int argsBeforeParams;
 
+    /**
+     * Creates a new ParamsBase for the given List of Parameters and the given
+     * amount of arguments before the first parameter
+     *
+     * @param params           The parameters for this ParamsBase
+     * @param argsBeforeParams The amount of arguments before the first param
+     */
     private ParamsBase(List<Parameter> params, int argsBeforeParams) {
         this.params = params;
         this.argsBeforeParams = argsBeforeParams;

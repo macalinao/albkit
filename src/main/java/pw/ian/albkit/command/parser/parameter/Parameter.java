@@ -15,6 +15,12 @@ public class Parameter {
      */
     private final boolean optional;
 
+    /**
+     * Constructs a new Parameter with the given name
+     *
+     * @param name     The name of this Parameter
+     * @param optional Whether this parameter is optional
+     */
     public Parameter(String name, boolean optional) {
         this.name = name;
         this.optional = optional;
