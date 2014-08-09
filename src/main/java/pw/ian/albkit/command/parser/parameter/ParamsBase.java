@@ -64,16 +64,16 @@ public class ParamsBase {
      */
     public Params createParams(Arguments args) {
         Map<String, Parameter> paramsMap = new HashMap<>();
-        int curArgument = argsBeforeParams - 1;
-        int curParam = -1;
-        boolean running = true;
-        while (running) {
-            String val = args.getRaw(++curArgument);
-            ParamInfo info = params.get(++curParam);
+        int curArgument = argsBeforeParams;
+        int curParam = 0;
+        while (true) {
+            String val = args.getRaw(curArgument);
+            ParamInfo info = params.get(curParam);
             paramsMap.put(info.getName(), new Parameter(val, info));
-
+            curArgument++;
+            curParam++;
             if (curArgument >= args.length() || curParam >= params.size()) {
-                running = false;
+                break;
             }
         }
         Params params = new Params(this, paramsMap);
