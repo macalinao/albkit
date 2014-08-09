@@ -29,6 +29,10 @@ public class Arguments {
      * A List of all flags prefixed with --
      */
     private final List<Flag> doubleFlags;
+    /**
+     * The raw String[] of arguments for this Arguments object
+     */
+    private final String[] raw;
 
     /**
      * The Params object for this Arguments object. This contains a Map of
@@ -49,7 +53,40 @@ public class Arguments {
         this.flags = new ArrayList<>();
         this.doubleFlags = new ArrayList<>();
 
-        parseArguments(parse);
+        raw = parse;
+        for (int i = 0; i < raw.length; i++) {
+            final String arg = raw[i];
+            all.add(new ChatSection(arg));
+
+            switch (arg.charAt(0)) {
+                case '-':
+                    if (arg.length() < 2) {
+                        arguments.add(new ChatSection(arg));
+                        continue;
+                    }
+                    if (arg.charAt(1) == '-') {
+                        if (arg.length() < 3) {
+                            arguments.add(new ChatSection(arg));
+                            continue;
+                        }
+                        // flag with double -- (no value)
+                        doubleFlags.add(new Flag(arg.substring(2, arg.length()), null));
+                    } else {
+                        if (raw.length - 1 == i) {
+                            arguments.add(new ChatSection(arg));
+                            continue;
+                        }
+                        // flag with single - (plus value)
+                        flags.add(new Flag(arg.substring(1, arg.length()), raw[i + 1]));
+                        i++;
+                    }
+                    break;
+                default:
+                    // normal argument
+                    arguments.add(new ChatSection(raw[i]));
+                    break;
+            }
+        }
     }
 
     /**
@@ -186,47 +223,9 @@ public class Arguments {
      * @return A raw String[] of arguments for this object
      */
     public String[] toStringArray() {
-        final String[] res = new String[all.size()];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = all.get(i).rawString();
-        }
-        return res;
-    }
-
-    private void parseArguments(final String... args) {
-        for (int i = 0; i < args.length; i++) {
-            final String arg = args[i];
-            all.add(new ChatSection(arg));
-
-            switch (arg.charAt(0)) {
-                case '-':
-                    if (arg.length() < 2) {
-                        arguments.add(new ChatSection(arg));
-                        continue;
-                    }
-                    if (arg.charAt(1) == '-') {
-                        if (arg.length() < 3) {
-                            arguments.add(new ChatSection(arg));
-                            continue;
-                        }
-                        // flag with double -- (no value)
-                        doubleFlags.add(new Flag(arg.substring(2, arg.length()), null));
-                    } else {
-                        if (args.length - 1 == i) {
-                            arguments.add(new ChatSection(arg));
-                            continue;
-                        }
-                        // flag with single - (plus value)
-                        flags.add(new Flag(arg.substring(1, arg.length()), args[i + 1]));
-                        i++;
-                    }
-                    break;
-                default:
-                    // normal argument
-                    arguments.add(new ChatSection(args[i]));
-                    break;
-            }
-        }
+        String[] result = new String[raw.length];
+        System.arraycopy(raw, 0, result, 0, raw.length);
+        return result;
     }
 
     /**
