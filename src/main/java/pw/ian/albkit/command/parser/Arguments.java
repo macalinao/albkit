@@ -43,7 +43,7 @@ public class Arguments {
      *
      * @param parse The String[] of raw arguments to parse
      */
-    public Arguments(final String[] parse) {
+    public Arguments(final String... parse) {
         this.all = new ArrayList<>();
         this.arguments = new ArrayList<>();
         this.flags = new ArrayList<>();
@@ -193,7 +193,7 @@ public class Arguments {
         return res;
     }
 
-    private void parseArguments(final String[] args) {
+    private void parseArguments(final String... args) {
         for (int i = 0; i < args.length; i++) {
             final String arg = args[i];
             all.add(new ChatSection(arg));

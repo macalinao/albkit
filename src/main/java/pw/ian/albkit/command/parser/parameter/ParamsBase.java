@@ -64,13 +64,26 @@ public class ParamsBase {
      */
     public Params createParams(Arguments args) {
         Map<String, Parameter> paramsMap = new HashMap<>();
-        for (int i = argsBeforeParams - 1; i < args.length(); i++) {
-            if (params.size() < i) {
+        int curArgument = argsBeforeParams;
+        int curParam = 0;
+        while (true) {
+            String val = args.getRaw(curArgument);
+            ParamInfo info = params.get(curParam);
+            paramsMap.put(info.getName(), new Parameter(val, info));
+            curArgument++;
+            curParam++;
+            if (curArgument >= args.length() || curParam >= params.size()) {
                 break;
             }
-            ParamInfo param = params.get(i);
-            paramsMap.put(param.getName(), new Parameter(args.getRaw(i), param));
         }
+//        for (int i = 0; i < args.length(); i++) {
+//            if (params.size() < i) {
+//                break;
+//            }
+//            ParamInfo param = params.get(i - argsBeforeParams);
+//            paramsMap
+//                    .put(param.getName(), new Parameter(args.getRaw(i), param));
+//        }
         Params params = new Params(this, paramsMap);
         if (this.params.size() > args.length() - argsBeforeParams) {
             params.invalidate();
