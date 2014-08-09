@@ -42,6 +42,10 @@ public class ParamsBase {
      * @return A set of parameters for the given arguments
      */
     public Params createParams(Arguments args) {
+        if (params.size() > args.length() - argsBeforeParams) {
+            return null;
+        }
+
         Map<String, ParamChatSection> paramsMap = new HashMap<>();
         for (int i = argsBeforeParams - 1; i < args.length(); i++) {
             if (params.size() < i) {

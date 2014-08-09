@@ -33,6 +33,8 @@ public abstract class CommandHandler implements CommandExecutor {
 
     private boolean async;
 
+    private boolean validateUsage;
+
     protected ParamsBase paramsBase;
 
     /**
@@ -51,6 +53,7 @@ public abstract class CommandHandler implements CommandExecutor {
         description = usage;
         permission = null;
         async = false;
+        validateUsage = true;
     }
 
     /**
@@ -67,6 +70,10 @@ public abstract class CommandHandler implements CommandExecutor {
         return usage;
     }
 
+    public boolean doesValidateUsage() {
+        return validateUsage;
+    }
+
     public ParamsBase getParamsBase() {
         return paramsBase;
     }
@@ -77,6 +84,10 @@ public abstract class CommandHandler implements CommandExecutor {
     public void setUsage(String usage) {
         this.usage = usage;
         paramsBase = ParamsBase.fromUsageString(usage);
+    }
+
+    public void setValidateUsage(boolean validateUsage) {
+        this.validateUsage = validateUsage;
     }
 
     /**
@@ -161,6 +172,10 @@ public abstract class CommandHandler implements CommandExecutor {
         Arguments newArgs = new Arguments(args);
         if (paramsBase != null) {
             newArgs.withParams(paramsBase.createParams(newArgs));
+            if (doesValidateUsage() && newArgs.getParams() == null) {
+                sender.sendMessage(ChatColor.RED + "Invalid usage, " + getUsage());
+                return;
+            }
         }
         this.onCommand(sender, newArgs);
     }
