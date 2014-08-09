@@ -63,7 +63,6 @@ public class ParamsBase {
      * @return A set of parameters for the given arguments
      */
     public Params createParams(Arguments args) {
-        System.out.println(args.length());
         Map<String, Parameter> paramsMap = new HashMap<>();
         int curArgument = argsBeforeParams;
         int curParam = 0;
@@ -72,7 +71,6 @@ public class ParamsBase {
                 break;
             }
 
-            System.out.println("test");
             String val = args.getRaw(curArgument);
             ParamInfo info = params.get(curParam);
             paramsMap.put(info.getName(), new Parameter(val, info));
