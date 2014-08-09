@@ -210,16 +210,14 @@ public class Arguments {
                             continue;
                         }
                         // flag with double -- (no value)
-                        doubleFlags.add(new Flag(arg.substring(2,
-                                arg.length()), null));
+                        doubleFlags.add(new Flag(arg.substring(2, arg.length()), null));
                     } else {
                         if (args.length - 1 == i) {
                             arguments.add(new ChatSection(arg));
                             continue;
                         }
                         // flag with single - (plus value)
-                        flags.add(new Flag(arg.substring(1, arg.length()),
-                                args[i + 1]));
+                        flags.add(new Flag(arg.substring(1, arg.length()), args[i + 1]));
                         i++;
                     }
                     break;
