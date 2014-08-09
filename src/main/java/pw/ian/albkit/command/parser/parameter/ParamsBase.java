@@ -67,14 +67,15 @@ public class ParamsBase {
         int curArgument = argsBeforeParams;
         int curParam = 0;
         while (true) {
+            if (curArgument >= args.length() || curParam >= params.size()) {
+                break;
+            }
+
             String val = args.getRaw(curArgument);
             ParamInfo info = params.get(curParam);
             paramsMap.put(info.getName(), new Parameter(val, info));
             curArgument++;
             curParam++;
-            if (curArgument >= args.length() || curParam >= params.size()) {
-                break;
-            }
         }
         Params params = new Params(this, paramsMap);
         if (this.params.size() > args.length() - argsBeforeParams) {
