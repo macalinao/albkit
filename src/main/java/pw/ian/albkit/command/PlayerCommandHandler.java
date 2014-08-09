@@ -57,7 +57,7 @@ public abstract class PlayerCommandHandler extends CommandHandler {
         Arguments newArgs = new Arguments(args);
         if (paramsBase != null) {
             newArgs.withParams(paramsBase.createParams(newArgs));
-            if (doesValidateUsage() && newArgs.getParams() == null) {
+            if (doesValidateUsage() && !newArgs.getParams().valid()) {
                 player.sendMessage(ChatColor.RED + "Invalid usage, " + getUsage());
                 return;
             }

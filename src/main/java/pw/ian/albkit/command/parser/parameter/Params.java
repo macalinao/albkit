@@ -13,6 +13,8 @@ public class Params {
      */
     private final Map<String, ParamChatSection> params;
 
+    private boolean valid = true;
+
     /**
      * Creates a new set of Params from the given Map of parameters to values
      *
@@ -40,5 +42,13 @@ public class Params {
      */
     public boolean has(String parameter) {
         return params.containsKey(parameter);
+    }
+
+    public boolean valid() {
+        return valid;
+    }
+
+    void invalidate() {
+        valid = false;
     }
 }
