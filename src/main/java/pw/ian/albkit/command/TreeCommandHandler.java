@@ -6,21 +6,17 @@
 package pw.ian.albkit.command;
 
 import pw.ian.albkit.command.parser.Arguments;
+import pw.ian.albkit.command.parser.parameter.ParamsBase;
+import pw.ian.albkit.util.ColorScheme;
 import pw.ian.albkit.util.Messaging;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import pw.ian.albkit.util.ColorScheme;
+
+import java.util.*;
 
 /**
- *
  * @author ian
  */
 public abstract class TreeCommandHandler extends CommandHandler {
@@ -72,7 +68,6 @@ public abstract class TreeCommandHandler extends CommandHandler {
     public void sendHelpMenu(CommandSender sender) {
         List<CommandHandler> cmds = new ArrayList<>(subcommands.values());
         Collections.sort(cmds, new Comparator<CommandHandler>() {
-
             @Override
             public int compare(CommandHandler t, CommandHandler t1) {
                 return t.getName().compareToIgnoreCase(t1.getName());
@@ -84,7 +79,8 @@ public abstract class TreeCommandHandler extends CommandHandler {
         for (CommandHandler handler : cmds) {
             if (handler.getPermission() == null
                     || sender.hasPermission(handler.getPermission())) {
-                msgs.add(ChatColor.GREEN + "/" + getName() + " " + handler.getName() + " - "
+                msgs.add(ChatColor.GREEN + "/" + getName() + " " + handler
+                        .getName() + " - "
                         + ChatColor.YELLOW + handler.getDescription());
             }
         }
@@ -108,7 +104,7 @@ public abstract class TreeCommandHandler extends CommandHandler {
      * @param handler
      */
     protected void addSubcommand(String name, CommandHandler handler) {
-        subcommands.put(name.toLowerCase(), handler);
+        subcommands.put(handler.getName(), handler);
     }
 
     @Override
@@ -118,9 +114,16 @@ public abstract class TreeCommandHandler extends CommandHandler {
             return;
         }
 
-        CommandHandler handler = subcommands.get(args.getArgument(0));
+        CommandHandler handler = subcommands.get(args.getRaw(0));
         if (handler != null) {
-            handler.onCommand(sender, new Arguments(Arrays.copyOfRange(args.toStringArray(), 1, args.length())));
+            Arguments newArgs = new Arguments(Arrays.copyOfRange
+                    (args.toStringArray(), 1, args.length()));
+            newArgs.withParams(handler.getParamsBase().createParams(newArgs));
+            if (doesValidateUsage() && !newArgs.getParams().valid()) {
+                sender.sendMessage(ChatColor.RED + "Invalid usage, " + getUsage());
+                return;
+            }
+            handler.onCommand(sender, newArgs);
             return;
         }
 

@@ -54,7 +54,15 @@ public abstract class PlayerCommandHandler extends CommandHandler {
      * @param args
      */
     public void onCommand(Player player, String[] args) {
-        this.onCommand(player, new Arguments(args));
+        Arguments newArgs = new Arguments(args);
+        if (paramsBase != null) {
+            newArgs.withParams(paramsBase.createParams(newArgs));
+            if (doesValidateUsage() && !newArgs.getParams().valid()) {
+                player.sendMessage(ChatColor.RED + "Invalid usage, " + getUsage());
+                return;
+            }
+        }
+        this.onCommand(player, newArgs);
     }
 
     /**

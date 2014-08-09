@@ -2,14 +2,17 @@ package pw.ian.albkit.command.parser;
 
 import org.junit.Assert;
 import org.junit.Test;
+import pw.ian.albkit.command.parser.parameter.Parameter;
+import pw.ian.albkit.command.parser.parameter.Params;
+import pw.ian.albkit.command.parser.parameter.ParamsBase;
+
+import java.util.Map;
 
 public class ArgumentsTest {
     @Test
     public void test() {
-        final Arguments args = new Arguments(new String[] {
-                "hello", "bob", "123", "1.445", "yolo", "cool", "-f", "banter",
-                "--lol"
-        });
+        Arguments args = new Arguments("hello", "bob", "123", "1.445", "yolo",
+                "cool", "-f", "banter", "--lol");
 
         Assert.assertFalse(
                 "Arguments seems to think that hello or bob is a boolean. Either that or they were parsed wrong.",
@@ -30,5 +33,28 @@ public class ArgumentsTest {
         Assert.assertEquals("Error parsing flag '-f'",
                 args.getValueFlag("f").getRawValue(), "banter");
         Assert.assertTrue(args.hasNonValueFlag("lol"));
+
+        for (int i = 0; i < 100; i++) {
+            ParamsBase base = ParamsBase
+                    .fromUsageString("/tree hello <hi> [lol]");
+            args = new Arguments("hello", "bob", "trees");
+            System.out.println(
+                    "Parsing: { hello, bob, trees } for usage '/tree hello <hi> [lol]' which produces parameters { hi, lol }");
+            args.withParams(base.createParams(args));
+            Params params = args.getParams();
+            System.out.println("Got params: " + string(params));
+            Assert.assertEquals(params.get("hi").get(), "bob");
+            Assert.assertTrue(params.valid());
+        }
+    }
+
+    String string(Params params) {
+        StringBuilder bu = new StringBuilder("{ ");
+        for (Map.Entry<String, Parameter> entry : params.entries()) {
+            bu.append("[ ").append(entry.getKey()).append(", ")
+                    .append(entry.getValue().get()).append(" ]").append(" , ");
+        }
+        bu.setLength(bu.length() - 2);
+        return bu.append("}").toString();
     }
 }

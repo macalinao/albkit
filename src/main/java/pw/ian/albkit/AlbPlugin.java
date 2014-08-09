@@ -1,5 +1,8 @@
 package pw.ian.albkit;
 
+import pw.ian.albkit.command.CommandHandler;
+import pw.ian.albkit.command.Commands;
+
 import org.bukkit.Server;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -40,6 +43,25 @@ public abstract class AlbPlugin extends JavaPlugin {
      */
     protected void register(final Listener listener) {
         pluginMgr.registerEvents(listener, this);
+    }
+
+    /**
+     * Registers the given CommandHandler to a command with the given name
+     *
+     * @param name    The name to register the command to
+     * @param handler The CommandHandler to register for the command
+     */
+    protected void register(final String name, final CommandHandler handler) {
+        Commands.registerCommand(this, name, handler);
+    }
+
+    /**
+     * Registers the given CommandHandler
+     *
+     * @param handler The CommandHandler to register
+     */
+    protected void register(final CommandHandler handler) {
+        register(handler.getName(), handler);
     }
 
 }
