@@ -15,6 +15,27 @@ import java.util.Map;
  */
 public class ParamsBase {
     /**
+     * The character which implies the beginning of a required parameter
+     */
+    public static final char REQUIRED_OPEN_DENOTATION = '<';
+    /**
+     * The character which implies the closing of a required parameter
+     */
+    public static final char REQUIRED_CLOSE_DENOTATION = '>';
+    /**
+     * The character which implies the opening of an optional parameter
+     */
+    public static final char OPTIONAL_OPEN_DENOTATION = '[';
+    /**
+     * The character which implies the closing of an optional parameter
+     */
+    public static final char OPTIONAL_CLOSE_DENOTATION = ']';
+    /**
+     * The character which separates arguments
+     */
+    public static final char ARGUMENT_SEPARATOR = ' ';
+
+    /**
      * A list of all of the parameters
      */
     private final List<Parameter> params;
@@ -73,17 +94,17 @@ public class ParamsBase {
         int before = 0;
 
         for (char ch : usageString.toCharArray()) {
-            if (!reachedFirst && ch == ' ') {
+            if (!reachedFirst && ch == ARGUMENT_SEPARATOR) {
                 before++;
                 continue;
             }
 
-            if (required && ch == '>') {
+            if (required && ch == REQUIRED_CLOSE_DENOTATION) {
                 required = false;
                 res.add(new Parameter(builder.toString(), false));
                 builder = null;
                 continue;
-            } else if (optional && ch == ']') {
+            } else if (optional && ch == OPTIONAL_CLOSE_DENOTATION) {
                 optional = false;
                 res.add(new Parameter(builder.toString(), true));
                 builder = null;
@@ -91,7 +112,7 @@ public class ParamsBase {
             }
 
             if (required || optional) {
-                if (ch == ' ') {
+                if (ch == ARGUMENT_SEPARATOR) {
                     // Workaround for flag arguments. I.E the usage submitted
                     // for '-f flag' should be "<-f flag>" and this will split
                     // the two into two separate arguments. This is the best way
@@ -103,11 +124,11 @@ public class ParamsBase {
                 }
                 builder.append(ch);
             } else {
-                if (ch == '<') {
+                if (ch == REQUIRED_OPEN_DENOTATION) {
                     reachedFirst = true;
                     required = true;
                     builder = new StringBuilder();
-                } else if (ch == '[') {
+                } else if (ch == OPTIONAL_OPEN_DENOTATION) {
                     reachedFirst = true;
                     optional = true;
                     builder = new StringBuilder();
