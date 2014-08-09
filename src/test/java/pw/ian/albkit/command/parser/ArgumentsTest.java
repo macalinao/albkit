@@ -43,6 +43,8 @@ public class ArgumentsTest {
         System.out.println("Got params: " + string(params));
         Assert.assertEquals("Not equal!", string(params),
                 "{ [ hi, bob ] , [ lol, trees ] }");
+        Assert.assertEquals(params.get("hi").get(), "bob");
+        Assert.assertTrue(params.valid());
     }
 
     String string(Params params) {
