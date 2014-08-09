@@ -38,7 +38,7 @@ public class ParamsBase {
     /**
      * A list of all of the parameters
      */
-    private final List<Parameter> params;
+    private final List<ParamInfo> params;
     /**
      * The number of arguments before the first parameter
      */
@@ -51,7 +51,7 @@ public class ParamsBase {
      * @param params           The parameters for this ParamsBase
      * @param argsBeforeParams The amount of arguments before the first param
      */
-    private ParamsBase(List<Parameter> params, int argsBeforeParams) {
+    private ParamsBase(List<ParamInfo> params, int argsBeforeParams) {
         this.params = params;
         this.argsBeforeParams = argsBeforeParams;
     }
@@ -63,16 +63,15 @@ public class ParamsBase {
      * @return A set of parameters for the given arguments
      */
     public Params createParams(Arguments args) {
-        Map<String, ParamChatSection> paramsMap = new HashMap<>();
+        Map<String, Parameter> paramsMap = new HashMap<>();
         for (int i = argsBeforeParams - 1; i < args.length(); i++) {
             if (params.size() < i) {
                 break;
             }
-            Parameter param = params.get(i);
-            paramsMap.put(param.getName(),
-                    new ParamChatSection(args.getRaw(i), param.isOptional()));
+            ParamInfo param = params.get(i);
+            paramsMap.put(param.getName(), new Parameter(args.getRaw(i), param));
         }
-        Params params = new Params(paramsMap);
+        Params params = new Params(this, paramsMap);
         if (this.params.size() > args.length() - argsBeforeParams) {
             params.invalidate();
         }
@@ -86,7 +85,7 @@ public class ParamsBase {
      * @return A new ParamsBase created from parsing the given usage string
      */
     public static ParamsBase fromUsageString(String usageString) {
-        List<Parameter> res = new ArrayList<>();
+        List<ParamInfo> res = new ArrayList<>();
         boolean required = false;
         boolean optional = false;
         StringBuilder builder = null;
@@ -101,12 +100,12 @@ public class ParamsBase {
 
             if (required && ch == REQUIRED_CLOSE_DENOTATION) {
                 required = false;
-                res.add(new Parameter(builder.toString(), false));
+                res.add(new ParamInfo(builder.toString(), false));
                 builder = null;
                 continue;
             } else if (optional && ch == OPTIONAL_CLOSE_DENOTATION) {
                 optional = false;
-                res.add(new Parameter(builder.toString(), true));
+                res.add(new ParamInfo(builder.toString(), true));
                 builder = null;
                 continue;
             }
@@ -118,7 +117,7 @@ public class ParamsBase {
                     // the two into two separate arguments. This is the best way
                     // to avoid inaccuracies as this system doesn't support
                     // having non-parameter arguments after the first parameter
-                    res.add(new Parameter(builder.toString(), optional));
+                    res.add(new ParamInfo(builder.toString(), optional));
                     builder = new StringBuilder();
                     continue;
                 }

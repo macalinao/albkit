@@ -14,7 +14,11 @@ public class Params {
     /**
      * A map of all of the parameters
      */
-    private final Map<String, ParamChatSection> params;
+    private final Map<String, Parameter> params;
+    /**
+     * Base information for these Params
+     */
+    private final ParamsBase base;
 
     /**
      * Whether this set of parameters is valid
@@ -24,10 +28,12 @@ public class Params {
     /**
      * Creates a new set of Params from the given Map of parameters to values
      *
+     * @param base   Base information for these params
      * @param params The parameters and their values for this Params object
      */
-    public Params(Map<String, ParamChatSection> params) {
+    public Params(ParamsBase base, Map<String, Parameter> params) {
         this.params = params;
+        this.base = base;
     }
 
     /**
@@ -36,8 +42,18 @@ public class Params {
      * @param parameter The parameter to get the value for
      * @return A ParamChatSection for the given parameter
      */
-    public ParamChatSection get(String parameter) {
+    public Parameter get(String parameter) {
         return params.get(parameter);
+    }
+
+    /**
+     * Gets the ParamsBase object for this set of Params. Contains basic info
+     * about the parameters involved
+     *
+     * @return Basic information about these Params
+     */
+    public ParamsBase getBaseInfo() {
+        return base;
     }
 
     /**
@@ -66,7 +82,7 @@ public class Params {
      *
      * @return A Set of all of the parameter values for this Params
      */
-    public Set<ParamChatSection> values() {
+    public Set<Parameter> values() {
         return new HashSet<>(params.values());
     }
 
@@ -76,7 +92,7 @@ public class Params {
      *
      * @return A Set of all entries to this Params' Map
      */
-    public Set<Entry<String, ParamChatSection>> entries() {
+    public Set<Entry<String, Parameter>> entries() {
         return new HashSet<>(params.entrySet());
     }
 

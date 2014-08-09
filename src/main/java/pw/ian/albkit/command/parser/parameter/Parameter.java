@@ -1,46 +1,36 @@
 package pw.ian.albkit.command.parser.parameter;
 
+import pw.ian.albkit.command.parser.ChatSection;
+
 /**
- * Represents a parameter, which can be required or optional
+ * An extension of ChatSection, used for parameters
  *
  * @author Ollie
  */
-public class Parameter {
+public class Parameter extends ChatSection {
     /**
-     * The name of this parameter
+     * The information (name, whether it is optional) for this parameter
      */
-    private final String name;
-    /**
-     * Whether this parameter is optional
-     */
-    private final boolean optional;
+    private final ParamInfo info;
 
     /**
-     * Constructs a new Parameter with the given name
+     * Creates a new ParamChatSection, using the given String argument as a raw
+     * string
      *
-     * @param name     The name of this Parameter
-     * @param optional Whether this parameter is optional
+     * @param arg  The raw string for this ParamChatSection
+     * @param info Information about this parameter
      */
-    public Parameter(String name, boolean optional) {
-        this.name = name;
-        this.optional = optional;
+    public Parameter(String arg, ParamInfo info) {
+        super(arg);
+        this.info = info;
     }
 
     /**
-     * Gets the name of this parameter
+     * Gets the ParamInfo for this Parameter
      *
-     * @return The name of this parameter
+     * @return This Parameter's ParamInfo object
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Returns whether this parameter is optional
-     *
-     * @return True if the parameter is optional, false if it is required
-     */
-    public boolean isOptional() {
-        return optional;
+    public ParamInfo getInfo() {
+        return info;
     }
 }

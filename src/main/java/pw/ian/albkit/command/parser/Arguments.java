@@ -1,6 +1,6 @@
 package pw.ian.albkit.command.parser;
 
-import pw.ian.albkit.command.parser.parameter.ParamChatSection;
+import pw.ian.albkit.command.parser.parameter.Parameter;
 import pw.ian.albkit.command.parser.parameter.Params;
 
 import java.util.ArrayList;
@@ -126,7 +126,7 @@ public class Arguments {
      * @return A ParamChatSection for the given parameter, or null if there isn't
      * one
      */
-    public ParamChatSection getParam(String parameter) {
+    public Parameter getParam(String parameter) {
         if (!hasParams()) {
             return null;
         }
