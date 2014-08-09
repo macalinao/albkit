@@ -91,10 +91,14 @@ public class ParamsBase {
         StringBuilder builder = null;
         boolean reachedFirst = false;
         int before = 0;
+        boolean passedCommand = false;
 
         for (char ch : usageString.toCharArray()) {
             if (!reachedFirst && ch == ARGUMENT_SEPARATOR) {
-                before++;
+                if (passedCommand) {
+                    before++;
+                }
+                passedCommand = true;
                 continue;
             }
 
