@@ -29,6 +29,26 @@ public final class MessageBuilder {
         return this;
     }
 
+    public MessageBuilder highlight() {
+        return append(scheme.getHighlight().toString());
+    }
+
+    public MessageBuilder light() {
+        return append(scheme.getLight().toString());
+    }
+
+    public MessageBuilder dark() {
+        return append(scheme.getDark().toString());
+    }
+
+    public MessageBuilder msg() {
+        return append(scheme.getMsg().toString());
+    }
+
+    public MessageBuilder prefix() {
+        return append(scheme.getPrefix().toString());
+    }
+
     public MessageBuilder append(String string) {
         return doAppend(scheme.format(string));
     }

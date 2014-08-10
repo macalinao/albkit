@@ -48,8 +48,16 @@ public class Messaging {
         return createMessage(ColorScheme.DEFAULT);
     }
 
+    public static MessageBuilder createMessage(String message) {
+        return createMessage(ColorScheme.DEFAULT, message);
+    }
+
     public static MessageBuilder createMessage(ColorScheme scheme) {
         return new MessageBuilder(scheme);
+    }
+
+    public static MessageBuilder createMessage(ColorScheme scheme, String message) {
+        return createMessage(scheme).append(message);
     }
 
     private Messaging() {
