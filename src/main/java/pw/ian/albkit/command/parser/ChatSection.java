@@ -14,9 +14,9 @@ import org.bukkit.entity.Player;
  */
 public class ChatSection {
     /**
-     * The raw argument
+     * The raw string for the argument wrapped by this ChatSection object
      */
-    private final String arg;
+    private final String raw;
 
     /**
      * Creates a new ChatSection, using the given String argument as a raw
@@ -25,7 +25,7 @@ public class ChatSection {
      * @param arg The raw string for this ChatSection
      */
     public ChatSection(final String arg) {
-        this.arg = arg;
+        this.raw = arg;
     }
 
     /**
@@ -43,27 +43,27 @@ public class ChatSection {
      * @return This ChatSection's raw String value
      */
     public String rawString() {
-        return arg;
+        return raw;
     }
 
     /**
      * Returns this ChatSection's value parsed as an int
      *
      * @return This ChatSection's value parsed as an int
-     * @throws NumberFormatException if the argument isn't an int
+     * @throws NumberFormatException if the value isn't an int
      */
     public int asInt() {
-        return Integer.parseInt(arg);
+        return Integer.parseInt(raw);
     }
 
     /**
      * Returns this ChatSection's value parsed as a double
      *
      * @return This ChatSection's value parsed as a double
-     * @throws NumberFormatException if the argument isn't a double
+     * @throws NumberFormatException if the value isn't a double
      */
     public double asDouble() {
-        return Double.parseDouble(arg);
+        return Double.parseDouble(raw);
     }
 
     /**
@@ -73,27 +73,27 @@ public class ChatSection {
      * @throws NumberFormatException if the argument isn't a float
      */
     public float asFloat() {
-        return Float.parseFloat(arg);
+        return Float.parseFloat(raw);
     }
 
     /**
      * Returns this ChatSection's value parsed as a long
      *
      * @return This ChatSection's value parsed as a long
-     * @throws NumberFormatException if the argument isn't a long
+     * @throws NumberFormatException if the value isn't a long
      */
     public long asLong() {
-        return Long.parseLong(arg);
+        return Long.parseLong(raw);
     }
 
     /**
      * Returns this ChatSection's value parsed as a short
      *
      * @return This ChatSection's value parsed as a short
-     * @throws NumberFormatException if the argument isn't a short
+     * @throws NumberFormatException if the value isn't a short
      */
     public short asShort() {
-        return Short.parseShort(arg);
+        return Short.parseShort(raw);
     }
 
     /**
@@ -103,52 +103,52 @@ public class ChatSection {
      * value of the ChatSection isn't a valid boolean, false is returned
      */
     public Boolean asBoolean() {
-        return Boolean.valueOf(arg);
+        return Boolean.valueOf(raw);
     }
 
     /**
      * Gets the player by the name of the argument, or null if the player isn't
      * online
      *
-     * @return The player by the name of the raw arg - null if (s)he isn't online
+     * @return The player by the name of the raw raw - null if (s)he isn't online
      */
     public Player asPlayer() {
-        return Bukkit.getPlayer(arg);
+        return Bukkit.getPlayer(raw);
     }
 
     /**
      * Gets the offline player by the name of the argument
      *
-     * @return The offline player by the name of the raw arg
+     * @return The offline player by the name of the raw raw
      */
     public OfflinePlayer asOfflinePlayer() {
-        return Bukkit.getOfflinePlayer(arg);
+        return Bukkit.getOfflinePlayer(raw);
     }
 
     /**
-     * Gets the material whose name is the same as the raw arg (ignores case)
+     * Gets the material whose name is the same as the raw value (ignores case)
      *
-     * @return The material whose name is the same as the raw arg, or null if no
-     * material has that name
+     * @return The material whose name is the same as the raw value, or null if
+     * no material has that name
      */
     public Material asMaterialFromName() {
-        return Material.getMaterial(arg.toUpperCase());
+        return Material.getMaterial(raw.toUpperCase());
     }
 
     /**
-     * Gets the material whose id is the same as the arg
+     * Gets the material whose id is the same as the raw value
      *
-     * @return The material whose id is the same as the arg
-     * @throws NumberFormatException If the arg isn't a valid int
+     * @return The material whose id is the same as the raw value
+     * @throws NumberFormatException If the value isn't a valid int
      */
     public Material asMaterialFromId() {
         return Material.getMaterial(asInt());
     }
 
     /**
-     * Checks whether this ChatSection's argument can be parsed as an integer
+     * Checks whether this ChatSection's value can be parsed as an integer
      *
-     * @return Whether this ChatSection's argument can be parsed as an integer
+     * @return Whether this ChatSection's value can be parsed as an integer
      */
     public boolean isInt() {
         try {
@@ -160,9 +160,9 @@ public class ChatSection {
     }
 
     /**
-     * Checks whether this ChatSection's argument can be parsed as a double
+     * Checks whether this ChatSection's value can be parsed as a double
      *
-     * @return Whether this ChatSection's argument can be parsed as a double
+     * @return Whether this ChatSection's value can be parsed as a double
      */
     public boolean isDouble() {
         try {
@@ -174,9 +174,9 @@ public class ChatSection {
     }
 
     /**
-     * Checks whether this ChatSection's argument can be parsed as a float
+     * Checks whether this ChatSection's value can be parsed as a float
      *
-     * @return Whether this ChatSection's argument can be parsed as a float
+     * @return Whether this ChatSection's value can be parsed as a float
      */
     public boolean isFloat() {
         try {
@@ -188,9 +188,9 @@ public class ChatSection {
     }
 
     /**
-     * Checks whether this ChatSection's argument can be parsed as a long
+     * Checks whether this ChatSection's value can be parsed as a long
      *
-     * @return Whether this ChatSection's argument can be parsed as a long
+     * @return Whether this ChatSection's value can be parsed as a long
      */
     public boolean isLong() {
         try {
@@ -202,9 +202,9 @@ public class ChatSection {
     }
 
     /**
-     * Checks whether this ChatSection's argument can be parsed as a short
+     * Checks whether this ChatSection's value can be parsed as a short
      *
-     * @return Whether this ChatSection's argument can be parsed as a short
+     * @return Whether this ChatSection's value can be parsed as a short
      */
     public boolean isShort() {
         try {
@@ -216,28 +216,28 @@ public class ChatSection {
     }
 
     /**
-     * Checks whether this ChatSection's argument can be parsed as a boolean
+     * Checks whether this ChatSection's value can be parsed as a boolean
      *
-     * @return Whether this ChatSection's argument can be parsed as a boolean
+     * @return Whether this ChatSection's value can be parsed as a boolean
      */
     public boolean isBoolean() {
-        return arg.equals("true") || arg.equals("false");
+        return raw.equals("true") || raw.equals("false");
     }
 
     /**
-     * Checks whether this ChatSection's argument can be parsed as a player
+     * Checks whether this ChatSection's value can be parsed as a player
      *
-     * @return Whether this ChatSection's argument can be parsed as a player
+     * @return Whether this ChatSection's value can be parsed as a player
      */
     public boolean isPlayer() {
         return asPlayer() != null;
     }
 
     /**
-     * Checks whether this ChatSection's argument can be parsed as an offline
+     * Checks whether this ChatSection's value can be parsed as an offline
      * player
      *
-     * @return Whether this ChatSection's argument can be parsed as an offline
+     * @return Whether this ChatSection's value can be parsed as an offline
      * player
      */
     public boolean isOfflinePlayer() {
@@ -245,10 +245,10 @@ public class ChatSection {
     }
 
     /**
-     * Checks whether this ChatSection's argument can be parsed as a material
+     * Checks whether this ChatSection's value can be parsed as a material
      * from it's name
      *
-     * @return Whether this ChatSection's argument can be parsed as a material
+     * @return Whether this ChatSection's value can be parsed as a material
      * from it's name
      */
     public boolean isMaterialName() {
@@ -256,10 +256,10 @@ public class ChatSection {
     }
 
     /**
-     * Checks whether this ChatSection's argument can be parsed as a material
+     * Checks whether this ChatSection's value can be parsed as a material
      * from it's ID
      *
-     * @return Whether this ChatSection's argument can be parsed as a material
+     * @return Whether this ChatSection's value can be parsed as a material
      * from it's ID
      */
     public boolean isMaterialId() {
