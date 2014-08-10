@@ -173,6 +173,21 @@ public class Arguments {
     }
 
     /**
+     * Gets a ParamChatSection value for the parameter with the given name, if
+     * there is a Params object available for these Arguments and said Params
+     * object contains a value for the given parameter. If either of these
+     * conditions are not true, null is returned. This method is a redirect to
+     * {@link #getParam(String)}
+     *
+     * @param parameter The parameter to get the ParamChatSection value for
+     * @return A ParamChatSection for the given parameter, or null if there isn't
+     * one
+     */
+    public Parameter param(String parameter) {
+        return getParam(parameter);
+    }
+
+    /**
      * Gets the raw string value for the parameter with the given name, if there
      * is a Params object available for these Arguments and said Params object
      * contains a value for the given parameter. If either of these conditions

@@ -99,11 +99,11 @@ public class ChatSection {
     /**
      * Returns this ChatSection's value parsed as a boolean
      *
-     * @return This ChatSection's value parsed as a boolean. If the value of the
-     * ChatSection isn't a valid boolean, false is returned
+     * @return This ChatSection's value parsed as a boolean. Note that if the
+     * value of the ChatSection isn't a valid boolean, false is returned
      */
-    public boolean asBoolean() {
-        return Boolean.parseBoolean(arg);
+    public Boolean asBoolean() {
+        return Boolean.valueOf(arg);
     }
 
     /**
