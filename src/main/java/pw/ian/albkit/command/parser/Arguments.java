@@ -173,6 +173,24 @@ public class Arguments {
     }
 
     /**
+     * Gets the raw string value for the parameter with the given name, if there
+     * is a Params object available for these Arguments and said Params object
+     * contains a value for the given parameter. If either of these conditions
+     * are not true, null is returned
+     *
+     * @param parameter The parameter to get the raw string value for
+     * @return A string value for the given parameter, or null if there isn't
+     * one
+     */
+    public String rawParam(String parameter) {
+        Parameter param = getParam(parameter);
+        if (param == null) {
+            return null;
+        }
+        return param.rawString();
+    }
+
+    /**
      * Checks whether the given parameter is available in this Arguments' Params
      * object
      *
