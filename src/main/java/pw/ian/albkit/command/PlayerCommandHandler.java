@@ -54,6 +54,15 @@ public abstract class PlayerCommandHandler extends CommandHandler {
      * @param args
      */
     public void onCommand(Player player, String[] args) {
+        if (args.length < getMinArgs()) {
+            sendUsageMessage(player);
+            return;
+        }
+        if (args.length > getMaxArgs()) {
+            sendUsageMessage(player);
+            return;
+        }
+
         Arguments newArgs = new Arguments(args);
         if (paramsBase != null) {
             newArgs.withParams(paramsBase.createParams(newArgs));

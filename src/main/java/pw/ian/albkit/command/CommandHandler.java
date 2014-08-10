@@ -31,6 +31,10 @@ public abstract class CommandHandler implements CommandExecutor {
 
     private String permission;
 
+    private int minArgs;
+
+    private int maxArgs;
+
     private boolean async;
 
     private boolean validateUsage;
@@ -52,6 +56,8 @@ public abstract class CommandHandler implements CommandExecutor {
         usage = "/" + name;
         description = usage;
         permission = null;
+        minArgs = 0;
+        maxArgs = Integer.MAX_VALUE;
         async = false;
         validateUsage = true;
     }
@@ -112,6 +118,27 @@ public abstract class CommandHandler implements CommandExecutor {
         this.permission = permission;
     }
 
+    public int getMinArgs() {
+        return minArgs;
+    }
+
+    public void setMinArgs(int minArgs) {
+        this.minArgs = minArgs;
+    }
+
+    public int getMaxArgs() {
+        return maxArgs;
+    }
+
+    public void setMaxArgs(int maxArgs) {
+        this.maxArgs = maxArgs;
+    }
+
+    public void setArgsBounds(int min, int max) {
+        setMinArgs(min);
+        setMaxArgs(max);
+    }
+
     public boolean isAsync() {
         return async;
     }
@@ -169,6 +196,15 @@ public abstract class CommandHandler implements CommandExecutor {
      * @param args
      */
     public void onCommand(final CommandSender sender, final String[] args) {
+        if (args.length < getMinArgs()) {
+            sendUsageMessage(sender);
+            return;
+        }
+        if (args.length > getMaxArgs()) {
+            sendUsageMessage(sender);
+            return;
+        }
+
         Arguments newArgs = new Arguments(args);
         if (paramsBase != null) {
             newArgs.withParams(paramsBase.createParams(newArgs));
