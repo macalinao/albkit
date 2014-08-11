@@ -53,7 +53,7 @@ public class ArgumentsTest {
         args.withParams(base.createParams(args));
         params = args.getParams();
         System.out.println(string(params));
-        Assert.assertFalse(params.valid());
+        Assert.assertTrue(params.valid());
     }
 
     String string(Params params) {

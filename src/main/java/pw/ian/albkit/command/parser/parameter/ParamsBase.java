@@ -77,8 +77,14 @@ public class ParamsBase {
             curArgument++;
             curParam++;
         }
+        int amtRequired = 0;
+        for (ParamInfo info : this.params) {
+            if (!info.isOptional()) {
+                amtRequired++;
+            }
+        }
         Params params = new Params(this, paramsMap);
-        if (this.params.size() > args.length() - argsBeforeParams) {
+        if (amtRequired > args.length() - argsBeforeParams) {
             params.invalidate();
         }
         return params;
