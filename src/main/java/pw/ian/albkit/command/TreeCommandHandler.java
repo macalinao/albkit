@@ -6,9 +6,8 @@
 package pw.ian.albkit.command;
 
 import pw.ian.albkit.command.parser.Arguments;
-import pw.ian.albkit.command.parser.parameter.ParamsBase;
 import pw.ian.albkit.util.ColorScheme;
-import pw.ian.albkit.util.Messaging;
+import pw.ian.albkit.messaging.Messaging;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

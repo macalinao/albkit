@@ -8,12 +8,13 @@ package pw.ian.albkit.util;
 import org.bukkit.ChatColor;
 
 /**
- *
  * @author ian
  */
 public class ColorScheme {
 
-    public static final ColorScheme DEFAULT = new ColorScheme(ChatColor.GREEN, ChatColor.DARK_GREEN, ChatColor.DARK_RED, ChatColor.WHITE, ChatColor.YELLOW);
+    public static final ColorScheme DEFAULT = new ColorScheme(ChatColor.GREEN,
+            ChatColor.DARK_GREEN, ChatColor.DARK_RED, ChatColor.WHITE,
+            ChatColor.YELLOW);
 
     private final ChatColor light;
 
@@ -25,7 +26,8 @@ public class ColorScheme {
 
     private final ChatColor highlight;
 
-    public ColorScheme(ChatColor light, ChatColor dark, ChatColor prefix, ChatColor msg, ChatColor highlight) {
+    public ColorScheme(ChatColor light, ChatColor dark, ChatColor prefix,
+            ChatColor msg, ChatColor highlight) {
         this.light = light;
         this.dark = dark;
         this.prefix = prefix;
@@ -55,9 +57,27 @@ public class ColorScheme {
 
     public String replaceColors(String msg) {
         return msg
-                .replaceAll("\\$D", dark.toString()).replaceAll("\\$L", light.toString())
-                .replaceAll("\\$M", this.msg.toString()).replaceAll("\\$H", highlight.toString())
+                .replaceAll("\\$D", dark.toString())
+                .replaceAll("\\$L", light.toString())
+                .replaceAll("\\$M", this.msg.toString())
+                .replaceAll("\\$H", highlight.toString())
                 .replaceAll("\\$P", prefix.toString());
+    }
+
+    /**
+     * Formats the given string, replacing ColorScheme codes, Minecraft colour
+     * codes and semantics with their appropriate ChatColor string
+     *
+     * @param msg The message to format
+     * @return A formatted String from the given message
+     */
+    public String format(String msg) {
+        return ChatColor.translateAlternateColorCodes('&', replaceColors(msg))
+                .replace("*highlight*", getHighlight().toString())
+                .replace("*dark*", getDark().toString())
+                .replace("*prefix*", getPrefix().toString())
+                .replace("*light*", getLight().toString())
+                .replace("*msg*", getMsg().toString());
     }
 
 }
