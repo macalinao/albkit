@@ -31,6 +31,8 @@ public abstract class CommandHandler implements CommandExecutor {
 
     private String permission;
 
+    private String noPermissionMessage = ChatColor.RED + "You don't have permission to use this command.";
+
     private int minArgs;
 
     private int maxArgs;
@@ -118,6 +120,14 @@ public abstract class CommandHandler implements CommandExecutor {
         this.permission = permission;
     }
 
+    public String getNoPermissionMessage() {
+        return noPermissionMessage;
+    }
+
+    public void setNoPermissionMessage(String noPermissionMessage) {
+        this.noPermissionMessage = noPermissionMessage;
+    }
+
     public int getMinArgs() {
         return minArgs;
     }
@@ -162,7 +172,7 @@ public abstract class CommandHandler implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmnd, String string, String[] args) {
         if (permission != null && !sender.hasPermission(permission)) {
-            sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
+            sender.sendMessage(noPermissionMessage);
             return true;
         }
 

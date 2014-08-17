@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author ian
  */
 public abstract class PlayerCommandHandler extends CommandHandler {
+    private String notPlayerMessage = ChatColor.RED + "You must be a player to use this command.";
 
     /**
      * C'tor
@@ -37,10 +38,18 @@ public abstract class PlayerCommandHandler extends CommandHandler {
         super(plugin, name);
     }
 
+    public String getNotPlayerMessage() {
+        return notPlayerMessage;
+    }
+
+    public void setNotPlayerMessage(String notPlayerMessage) {
+        this.notPlayerMessage = notPlayerMessage;
+    }
+
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "You must be a player to use this command.");
+            sender.sendMessage(notPlayerMessage);
             return;
         }
 
