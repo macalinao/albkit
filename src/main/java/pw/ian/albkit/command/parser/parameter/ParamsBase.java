@@ -43,6 +43,11 @@ public class ParamsBase {
      * The number of arguments before the first parameter
      */
     private final int argsBeforeParams;
+    /**
+     * The amount of arguments required for a valid Params object for this
+     * ParamsBase, used for argument validation
+     */
+    private final int amtRequired;
 
     /**
      * Creates a new ParamsBase for the given List of Parameters and the given
@@ -50,10 +55,12 @@ public class ParamsBase {
      *
      * @param params           The parameters for this ParamsBase
      * @param argsBeforeParams The amount of arguments before the first param
+     * @param amtRequired      The amount of required parameters
      */
-    private ParamsBase(List<ParamInfo> params, int argsBeforeParams) {
+    private ParamsBase(List<ParamInfo> params, int argsBeforeParams, int amtRequired) {
         this.params = params;
         this.argsBeforeParams = argsBeforeParams;
+        this.amtRequired = amtRequired;
     }
 
     /**
@@ -77,16 +84,12 @@ public class ParamsBase {
             curArgument++;
             curParam++;
         }
-        int amtRequired = 0;
-        for (ParamInfo info : this.params) {
-            if (!info.isOptional()) {
-                amtRequired++;
-            }
-        }
+
         Params params = new Params(this, paramsMap);
         if (amtRequired > args.length() - argsBeforeParams) {
             params.invalidate();
         }
+
         return params;
     }
 
@@ -104,6 +107,7 @@ public class ParamsBase {
         boolean reachedFirst = false;
         int before = 0;
         boolean passedCommand = false;
+        int amtRequired = 0;
 
         for (char ch : usageString.toCharArray()) {
             if (!reachedFirst && ch == ARGUMENT_SEPARATOR) {
@@ -128,6 +132,10 @@ public class ParamsBase {
 
             if (required || optional) {
                 if (ch == ARGUMENT_SEPARATOR) {
+                    if (required) {
+                        amtRequired++;
+                    }
+
                     // Workaround for flag arguments. I.E the usage submitted
                     // for '-f flag' should be "<-f flag>" and this will split
                     // the two into two separate arguments. This is the best way
@@ -150,6 +158,7 @@ public class ParamsBase {
                 }
             }
         }
-        return new ParamsBase(res, before);
+
+        return new ParamsBase(res, before, amtRequired);
     }
 }
