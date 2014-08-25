@@ -12,11 +12,6 @@ public class Flag {
      */
     private final String flag;
     /**
-     * The raw value of this flag. For example, if the user entered '-lol tree'.
-     * this would be 'tree'
-     */
-    private final String value;
-    /**
      * The ChatSection representing the value of this flag, which provides
      * various methods to use the value
      */
@@ -24,8 +19,6 @@ public class Flag {
 
     public Flag(final String flag, final String value) {
         this.flag = flag;
-        this.value = value;
-
         valArg = new ChatSection(value);
     }
 
@@ -38,6 +31,6 @@ public class Flag {
     }
 
     public String getRawValue() {
-        return value;
+        return getValue().rawString();
     }
 }
