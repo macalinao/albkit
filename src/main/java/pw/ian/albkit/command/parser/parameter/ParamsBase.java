@@ -63,6 +63,22 @@ public class ParamsBase {
         this.amtRequired = amtRequired;
     }
 
+    public int length() {
+        return params.size();
+    }
+
+    public int getArgsBeforeParams() {
+        return argsBeforeParams;
+    }
+
+    public int getAmountRequired() {
+        return amtRequired;
+    }
+
+    public int getAmountOptional() {
+        return length() - getAmountRequired();
+    }
+
     /**
      * Creates a set of parameters for this base using the given arguments
      *
@@ -78,7 +94,7 @@ public class ParamsBase {
                 break;
             }
 
-            String val = args.getRaw(curArgument);
+            String val = args.getArgument(curArgument, true).get();
             ParamInfo info = params.get(curParam);
             paramsMap.put(info.getName(), new Parameter(val, info));
             curArgument++;
@@ -121,6 +137,7 @@ public class ParamsBase {
             if (required && ch == REQUIRED_CLOSE_DENOTATION) {
                 required = false;
                 res.add(new ParamInfo(builder.toString(), false));
+                amtRequired++;
                 builder = null;
                 continue;
             } else if (optional && ch == OPTIONAL_CLOSE_DENOTATION) {
@@ -132,16 +149,15 @@ public class ParamsBase {
 
             if (required || optional) {
                 if (ch == ARGUMENT_SEPARATOR) {
-                    if (required) {
-                        amtRequired++;
-                    }
-
                     // Workaround for flag arguments. I.E the usage submitted
                     // for '-f flag' should be "<-f flag>" and this will split
                     // the two into two separate arguments. This is the best way
                     // to avoid inaccuracies as this system doesn't support
                     // having non-parameter arguments after the first parameter
                     res.add(new ParamInfo(builder.toString(), optional));
+                    if (!optional) {
+                        amtRequired++;
+                    }
                     builder = new StringBuilder();
                     continue;
                 }
