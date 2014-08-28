@@ -63,18 +63,38 @@ public class ParamsBase {
         this.amtRequired = amtRequired;
     }
 
+    /**
+     * Gets the amount of parameters
+     *
+     * @return The amount of parameters in this ParamsBase
+     */
     public int length() {
         return params.size();
     }
 
+    /**
+     * Gets the amount of arguments before the first parameter
+     *
+     * @return The amount of arguments before the first parameter
+     */
     public int getArgsBeforeParams() {
         return argsBeforeParams;
     }
 
+    /**
+     * Gets the amount of required parameters
+     *
+     * @return The amount of required parameters
+     */
     public int getAmountRequired() {
         return amtRequired;
     }
 
+    /**
+     * Gets the amount of non-required (optional) parameters
+     *
+     * @return The amount of optional parameters
+     */
     public int getAmountOptional() {
         return length() - getAmountRequired();
     }
@@ -94,8 +114,9 @@ public class ParamsBase {
                 break;
             }
 
-            String val = args.getArgument(curArgument, true).get();
+            String val = args.getRaw(curArgument, false);
             ParamInfo info = params.get(curParam);
+
             paramsMap.put(info.getName(), new Parameter(val, info));
             curArgument++;
             curParam++;
@@ -125,7 +146,10 @@ public class ParamsBase {
         boolean passedCommand = false;
         int amtRequired = 0;
 
-        for (char ch : usageString.toCharArray()) {
+        final char[] characters = usageString.toCharArray();
+        for (int i = 0; i < characters.length; i++) {
+            final char ch = characters[i];
+
             if (!reachedFirst && ch == ARGUMENT_SEPARATOR) {
                 if (passedCommand) {
                     before++;
@@ -148,19 +172,14 @@ public class ParamsBase {
             }
 
             if (required || optional) {
-                if (ch == ARGUMENT_SEPARATOR) {
-                    // Workaround for flag arguments. I.E the usage submitted
-                    // for '-f flag' should be "<-f flag>" and this will split
-                    // the two into two separate arguments. This is the best way
-                    // to avoid inaccuracies as this system doesn't support
-                    // having non-parameter arguments after the first parameter
-                    res.add(new ParamInfo(builder.toString(), optional));
-                    if (!optional) {
-                        amtRequired++;
-                    }
-                    builder = new StringBuilder();
+                if (ch == '-' && characters[i + 1] != REQUIRED_CLOSE_DENOTATION && characters[i + 1] != OPTIONAL_CLOSE_DENOTATION && characters[i + 2] == ' ') {
+                    i += 2;
+                    required = false;
+                    optional = false;
+                    builder = null;
                     continue;
                 }
+
                 builder.append(ch);
             } else {
                 if (ch == REQUIRED_OPEN_DENOTATION) {

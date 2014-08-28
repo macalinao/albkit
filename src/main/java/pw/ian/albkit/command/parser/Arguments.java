@@ -79,8 +79,7 @@ public class Arguments {
                         }
                         // flag with single - (plus value)
                         flags.add(new Flag(arg.substring(1, arg.length()),
-                                raw[i + 1]));
-                        i++;
+                                raw[++i]));
                     }
                     break;
                 default:
@@ -98,7 +97,22 @@ public class Arguments {
      * @return A ChatSection object for the argument at the given index
      */
     public ChatSection get(final int index) {
-        return getArgument(index, true);
+        return get(index, true);
+    }
+
+    /**
+     * Gets the ChatSection for the argument at the given index
+     *
+     * @param index The index to get the argument from
+     * @param includeFlagArgs Whether to include flag args in the index
+     * @return A ChatSection object for the argument at the given index
+     */
+    public ChatSection get(final int index, final boolean includeFlagArgs) {
+        if (includeFlagArgs) {
+            return all.get(index);
+        } else {
+            return arguments.get(index);
+        }
     }
 
     /**
@@ -108,33 +122,18 @@ public class Arguments {
      * @return A raw String for the argument at the given index
      */
     public String getRaw(final int index) {
-        return getArgument(index, true).rawString();
+        return getRaw(index, true);
     }
 
     /**
-     * Gets the ChatSection for the argument at the given index
+     * Gets the raw string for the argument at the given index
      *
      * @param index The index to get the argument from
-     * @return A ChatSection object for the argument at the given index
+     * @param includeFlagArgs Whether to include flag args in the index
+     * @return A raw String for the argument at the given index
      */
-    public ChatSection getArgument(final int index) {
-        return getArgument(index, true);
-    }
-
-    /**
-     * Gets the ChatSection for the argument at the given index
-     *
-     * @param index           The index to get the argument from
-     * @param includeFlagArgs Whether to include flag arguments
-     * @return A ChatSection object for the argument at the given index
-     */
-    public ChatSection getArgument(final int index,
-            final boolean includeFlagArgs) {
-        if (includeFlagArgs) {
-            return all.get(index);
-        } else {
-            return arguments.get(index);
-        }
+    public String getRaw(final int index, final boolean includeFlagArgs) {
+        return get(index, includeFlagArgs).rawString();
     }
 
     /**
