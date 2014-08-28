@@ -270,7 +270,21 @@ public class Arguments {
      * @return The amount of arguments in this Arguments object
      */
     public int length() {
-        return all.size();
+        return length(true);
+    }
+
+    /**
+     * Gets the length of the arguments
+     *
+     * @param includeFlagArgs Whether to include flag args in the arg count
+     * @return The amount of arguments in this Arguments object
+     */
+    public int length(boolean includeFlagArgs) {
+        if (includeFlagArgs) {
+            return all.size();
+        } else {
+            return arguments.size();
+        }
     }
 
     /**

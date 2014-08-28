@@ -48,6 +48,10 @@ public class ParamsBase {
      * ParamsBase, used for argument validation
      */
     private final int amtRequired;
+    /**
+     * Flag information for validation
+     */
+    private final List<FlagInfo> flags;
 
     /**
      * Creates a new ParamsBase for the given List of Parameters and the given
@@ -57,10 +61,11 @@ public class ParamsBase {
      * @param argsBeforeParams The amount of arguments before the first param
      * @param amtRequired      The amount of required parameters
      */
-    private ParamsBase(List<ParamInfo> params, int argsBeforeParams, int amtRequired) {
+    private ParamsBase(List<ParamInfo> params, int argsBeforeParams, int amtRequired, List<FlagInfo> flags) {
         this.params = params;
         this.argsBeforeParams = argsBeforeParams;
         this.amtRequired = amtRequired;
+        this.flags = flags;
     }
 
     /**
@@ -99,6 +104,10 @@ public class ParamsBase {
         return length() - getAmountRequired();
     }
 
+    public int getAmountFlags() {
+        return flags.size();
+    }
+
     /**
      * Creates a set of parameters for this base using the given arguments
      *
@@ -109,9 +118,14 @@ public class ParamsBase {
         Map<String, Parameter> paramsMap = new HashMap<>();
         int curArgument = argsBeforeParams;
         int curParam = 0;
-        while (true) {
-            if (curArgument >= args.length() || curParam >= params.size()) {
-                break;
+        int curFlag = 0;
+        boolean invalid = false;
+
+        while (curArgument < args.length(false) && curParam < params.size()) {
+            if (curFlag < flags.size()) {
+                if (!args.hasValueFlag(flags.get(curFlag++).getName())) {
+                    invalid = true;
+                }
             }
 
             String val = args.getRaw(curArgument, false);
@@ -122,8 +136,14 @@ public class ParamsBase {
             curParam++;
         }
 
+        while (curFlag < flags.size()) {
+            if (!args.hasValueFlag(flags.get(curFlag++).getName())) {
+                invalid = true;
+            }
+        }
+
         Params params = new Params(this, paramsMap);
-        if (amtRequired > args.length() - argsBeforeParams) {
+        if (invalid || amtRequired > paramsMap.size()) {
             params.invalidate();
         }
 
@@ -145,6 +165,7 @@ public class ParamsBase {
         int before = 0;
         boolean passedCommand = false;
         int amtRequired = 0;
+        List<FlagInfo> flags = new ArrayList<FlagInfo>();
 
         final char[] characters = usageString.toCharArray();
         for (int i = 0; i < characters.length; i++) {
@@ -172,7 +193,25 @@ public class ParamsBase {
             }
 
             if (required || optional) {
-                if (ch == '-' && characters[i + 1] != REQUIRED_CLOSE_DENOTATION && characters[i + 1] != OPTIONAL_CLOSE_DENOTATION && characters[i + 2] == ' ') {
+                final char next = characters[i + 1];
+                if (ch == '-' && next != REQUIRED_CLOSE_DENOTATION && next != OPTIONAL_CLOSE_DENOTATION && characters[i + 2] == ' ') {
+                    StringBuilder desc = new StringBuilder();
+                    int breakPoint = Integer.MAX_VALUE;
+                    boolean isOptional = false;
+                    for (int j = 3; j < breakPoint; j++) {
+                        char toAppend = characters[i + j];
+                        if (toAppend == REQUIRED_CLOSE_DENOTATION || toAppend == OPTIONAL_CLOSE_DENOTATION) {
+                            if (toAppend == OPTIONAL_CLOSE_DENOTATION) {
+                                isOptional = true;
+                            }
+                            breakPoint = j;
+                            continue;
+                        }
+
+                        desc.append(toAppend);
+                    }
+                    flags.add(new FlagInfo(String.valueOf(next), desc.toString(), isOptional));
+
                     i += 2;
                     required = false;
                     optional = false;
@@ -194,6 +233,6 @@ public class ParamsBase {
             }
         }
 
-        return new ParamsBase(res, before, amtRequired);
+        return new ParamsBase(res, before, amtRequired, flags);
     }
 }

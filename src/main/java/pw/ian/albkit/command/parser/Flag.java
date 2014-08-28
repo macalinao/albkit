@@ -7,8 +7,7 @@ package pw.ian.albkit.command.parser;
  */
 public class Flag {
     /**
-     * The name of this flag. For example, if the user entered '-lol tree', this
-     * would be 'lol'
+     * Information about the flag
      */
     private final String flag;
     /**
